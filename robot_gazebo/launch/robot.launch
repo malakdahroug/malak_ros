@@ -1,0 +1,4 @@
+<launch>
+	<param name="robot_description" command="$(find xacro)/xacro.py $(find robot_description)/urdf/turtlebot3_burger.urdf.xacro" />
+	<node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -x 0.5 -y 0.5 -z 0 -model MalakRobot" />
+</launch>

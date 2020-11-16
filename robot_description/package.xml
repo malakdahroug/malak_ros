@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>robot_description</name>
+  <version>0.0.1</version>
+  <description>
+    3D model of the robot for assignment based on TurtleBot3 
+  </description>
+  <license>Apache 2.0</license>
+  <author email="md1330@live.mdx.ac.uk">Malak Dahroug</author>
+  <maintainer email="md1330@live.mdx.ac.uk">Malak Dahroug</maintainer>
+  <url type="website">https://codelab.mdx.ac.uk/MD1330/robot_package.git</url>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>urdf</depend>
+  <depend>xacro</depend>
+</package>

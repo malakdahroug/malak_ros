@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<robot name="test3" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:include filename="$(find test3_description)/urdf/materials.xacro" />
+<xacro:include filename="$(find test3_description)/urdf/test3.trans" />
+<xacro:include filename="$(find test3_description)/urdf/test3.gazebo" />
+<link name="base_link">
+  <inertial>
+    <origin rpy="0 0 0" xyz="0.2578849268840635 0.14076985376812412 0.25788492688406134"/>
+    <mass value="149.11525815737954"/>
+    <inertia ixx="3.764926" ixy="-0.727035" ixz="-0.363517" iyy="2.833278" iyz="-0.727035" izz="3.764926"/>
+  </inertial>
+  <visual>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <mesh filename="package://test3_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <mesh filename="package://test3_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+    </geometry>
+  </collision>
+</link>
+
+</robot>
