@@ -26,7 +26,7 @@
   <gravity>true</gravity>
 </gazebo>
 
-<gazebo reference="front_caster_base">
+<gazebo reference="base_wheel_mount_back">
   <material>${body_color}</material>
   <mu1>0.0</mu1>
   <mu2>0.0</mu2>
@@ -34,7 +34,7 @@
   <gravity>true</gravity>
 </gazebo>
 
-<gazebo reference="back_caster_base">
+<gazebo reference="base_wheel_mount_front">
   <material>${body_color}</material>
   <mu1>0.0</mu1>
   <mu2>0.0</mu2>
@@ -42,58 +42,53 @@
   <gravity>true</gravity>
 </gazebo>
 
-<gazebo reference="front_caster_side">
+<gazebo reference="balance_ball_front">
   <material>${body_color}</material>
   <mu1>0.0</mu1>
   <mu2>0.0</mu2>
+  <kp>1000000.0</kp>
+  <kd>100.0</kd>
+  <minDepth>0.001</minDepth>
+  <maxVel>1.0</maxVel>
   <selfCollide>false</selfCollide>
   <gravity>true</gravity>
 </gazebo>
 
-<gazebo reference="back_caster_side">
+<gazebo reference="balance_ball_back">
   <material>${body_color}</material>
   <mu1>0.0</mu1>
   <mu2>0.0</mu2>
+  <kp>1000000.0</kp>
+  <kd>100.0</kd>
+  <minDepth>0.001</minDepth>
+  <maxVel>1.0</maxVel>
   <selfCollide>false</selfCollide>
-  <gravity>true</gravity>
-</gazebo>
-
-<gazebo reference="front_caster_wheel">
-  <material>${body_color}</material>
-  <mu1>0.01</mu1>
-  <mu2>0.01</mu2>
-  <fdir1>0 0 0</fdir1>
-  <slip1>1.0</slip1>
-  <slip2>1.0</slip2>
-  <selfCollide>true</selfCollide>
-  <gravity>true</gravity>
-</gazebo>
-
-<gazebo reference="back_caster_wheel">
-  <material>${body_color}</material>
-  <mu1>0.01</mu1>
-  <mu2>0.01</mu2>
-  <fdir1>0 0 0</fdir1>
-  <slip1>1.0</slip1>
-  <slip2>1.0</slip2>
-  <selfCollide>true</selfCollide>
   <gravity>true</gravity>
 </gazebo>
 
 <gazebo reference="left_wheel">
-  <material>${body_color}</material>
-  <mu1>0.15</mu1>
-  <mu2>0.15</mu2>
+  <material>${body_color2}</material>
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
+  <kp>500000.0</kp>
+  <kd>10.0</kd>
+  <minDepth>0.001</minDepth>
+  <maxVel>0.1</maxVel>
   <selfCollide>true</selfCollide>
   <gravity>true</gravity>
 </gazebo>
 
 <gazebo reference="right_wheel">
-  <material>${body_color}</material>
-  <mu1>0.15</mu1>
-  <mu2>0.15</mu2>
+  <material>${body_color2}</material>
+  <mu1>1.0</mu1>
+  <mu2>1.0</mu2>
+  <kp>500000.0</kp>
+  <kd>10.0</kd>
+  <minDepth>0.001</minDepth>
+  <maxVel>0.1</maxVel>
   <selfCollide>true</selfCollide>
   <gravity>true</gravity>
 </gazebo>
+
 
 </robot>

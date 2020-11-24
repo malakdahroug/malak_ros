@@ -8,6 +8,7 @@
     <geometry>
       <cylinder radius="0.2" length="0.02"/>
     </geometry>
+    <material name="silver"/>
   </visual>
   <collision>
     <origin rpy="0 0 0" xyz="0 0 0.1"/>
@@ -16,7 +17,7 @@
     </geometry>
   </collision>
   <inertial>
-    <mass value="5"/>
+    <mass value="75"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
   </inertial>
@@ -28,6 +29,7 @@
     <geometry>
       <box size="0.1 0.4 0.02"/>
     </geometry>
+    <material name="silver"/>
   </visual>
   <collision>
     <origin rpy="0 0 0" xyz="0 0 0.1"/>
@@ -36,132 +38,11 @@
     </geometry>
   </collision>
   <inertial>
-    <mass value="5"/>
+    <mass value="75"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
   </inertial>
 </link>
-
-<link name="front_caster_base">
-  <visual>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-    <geometry>
-      <box size="0.075 0.075 0.02"/>
-    </geometry>
-  </visual>
-  <collision>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-    <geometry>
-      <box size="0.075 0.075 0.02"/>
-    </geometry>
-  </collision>
-  <inertial>
-    <mass value="0.5"/>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-    <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
-  </inertial>
-</link>
-
-<link name="back_caster_base">
-  <visual>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-    <geometry>
-      <box size="0.075 0.075 0.02"/>
-    </geometry>
-  </visual>
-  <collision>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-    <geometry>
-      <box size="0.075 0.075 0.02"/>
-    </geometry>
-  </collision>
-  <inertial>
-    <mass value="0.5"/>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-    <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
-  </inertial>
-</link>
-
-<link name="front_caster_side">
-  <visual>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-    <geometry>
-      <box size="0.075 0.02 0.05"/>
-    </geometry>
-  </visual>
-  <collision>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-    <geometry>
-      <box size="0.075 0.02 0.05"/>
-    </geometry>
-  </collision>
-  <inertial>
-    <mass value="0.5"/>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-    <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
-  </inertial>
-</link>
-
-<link name="back_caster_side">
-  <visual>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-    <geometry>
-      <box size="0.075 0.02 0.05"/>
-    </geometry>
-  </visual>
-  <collision>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-    <geometry>
-      <box size="0.075 0.02 0.05"/>
-    </geometry>
-  </collision>
-  <inertial>
-    <mass value="0.5"/>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-    <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
-  </inertial>
-</link>
-
-<link name="front_caster_wheel">
-  <visual>
-    <origin rpy="1.57 0 0" xyz="0 0 0"/>
-    <geometry>
-      <cylinder radius="0.03" length="0.035"/>
-    </geometry>
-  </visual>
-  <collision>
-    <origin rpy="1.57 0 0" xyz="0 0 0"/>
-    <geometry>
-      <cylinder radius="0.03" length="0.035"/>
-    </geometry>
-  </collision>
-  <inertial>
-    <mass value="5"/>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-    <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
-  </inertial>
-</link>
-
-<link name="back_caster_wheel">
-  <visual>
-    <origin rpy="-1.57 0 0" xyz="0 0 0"/>
-    <geometry>
-      <cylinder radius="0.03" length="0.035"/>
-    </geometry>
-  </visual>
-  <collision>
-    <origin rpy="-1.57 0 0" xyz="0 0 0"/>
-    <geometry>
-      <cylinder radius="0.03" length="0.035"/>
-    </geometry>  
-  </collision>
-  <inertial>
-    <mass value="5"/>
-    <origin rpy="0 0 0" xyz="0 0 0"/>
-    <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
-  </inertial>
-</link>
-
 
 <link name="left_wheel">
   <visual>
@@ -169,6 +50,7 @@
     <geometry>
       <cylinder radius="0.1" length="0.05"/> 
     </geometry>
+    <material name="silver"/>
   </visual>
   <collision>
     <origin rpy="1.57 0 0" xyz="0 0 0"/>
@@ -177,7 +59,7 @@
     </geometry>
   </collision>
   <inertial>
-    <mass value="5"/>
+    <mass value="0.5"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
   </inertial>
@@ -189,6 +71,7 @@
     <geometry>
       <cylinder radius="0.1" length="0.05"/> 
     </geometry>
+    <material name="silver"/>
   </visual>
   <collision>
     <origin rpy="1.57 0 0" xyz="0 0 0"/>
@@ -197,9 +80,97 @@
     </geometry>
   </collision>
   <inertial>
-    <mass value="5"/>
+    <mass value="0.5"/>
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+  </inertial>
+</link>
+
+<link name="balance_wheel_mount_back">
+  <visual>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <box size="0.05 0.05 0.08"/> 
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <box size="0.05 0.05 0.08"/> 
+    </geometry>
+  </collision>
+  <inertial>
+    <mass value="0.5"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+  </inertial>
+</link>
+
+<link name="balance_wheel_mount_front">
+  <visual>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <box size="0.05 0.05 0.08"/> 
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <box size="0.05 0.05 0.08"/> 
+    </geometry>
+  </collision>
+  <inertial>
+    <mass value="0.5"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+  </inertial>
+</link>
+
+<link name="balance_ball_front">
+  <visual>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <sphere radius="0.025"/> 
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <sphere radius="0.025"/> 
+    </geometry>
+  </collision>
+  <inertial>
+    <mass value="0.5"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <inertia ixx="0.001" ixy="0.0" ixz="0.0"
+               iyy="0.001" iyz="0.0"
+               izz="0.001" />
+  </inertial>
+</link>
+
+<link name="balance_ball_back">
+  <visual>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <sphere radius="0.025"/> 
+    </geometry>
+    <material name="silver"/>
+  </visual>
+  <collision>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <geometry>
+      <sphere radius="0.025"/> 
+    </geometry>
+  </collision>
+  <inertial>
+    <mass value="0.5"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <inertia ixx="0.001" ixy="0.0" ixz="0.0"
+               iyy="0.001" iyz="0.0"
+               izz="0.001" />
   </inertial>
 </link>
 
@@ -211,47 +182,34 @@
   <axis xyz="0.0 1.0 0.0"/>
 </joint>
 
-<joint name="front_caster_base_joint" type="continuous">
-  <origin rpy="0 0 0" xyz="0.15 0 0.08"/>
-  <parent link="base_link"/>
-  <child link="front_caster_base"/>
-  <axis xyz="0.0 0.0 1.0"/>
-</joint>
-
-<joint name="back_caster_base_joint" type="continuous">
-  <origin rpy="0 0 0" xyz="-0.15 0 0.08"/>
-  <parent link="base_link"/>
-  <child link="back_caster_base"/>
-  <axis xyz="0.0 0.0 1.0"/>
-</joint>
-
-<joint name="front_caster_side_joint" type="fixed">
-  <origin rpy="0 0 0" xyz="0 0.0275 -0.03"/>
-  <parent link="front_caster_base"/>
-  <child link="front_caster_side"/>
-  <axis xyz="0.0 0.0 1.0"/>
-</joint>
-
-<joint name="back_caster_side_joint" type="fixed">
-  <origin rpy="0 0 0" xyz="0 0.0275 -0.03"/>
-  <parent link="back_caster_base"/>
-  <child link="back_caster_side"/>
-  <axis xyz="0.0 0.0 1.0"/>
-</joint>
-
-<joint name="front_caster_wheel_joint" type="continuous">
-  <origin rpy="0 0 0" xyz="0 -0.0275 -0.02"/>
-  <parent link="front_caster_side"/>
-  <child link="front_caster_wheel"/>
+<joint name="base_balance_back" type="fixed">
+  <origin rpy="0 0 0" xyz="0.15 0 0.05"/>
+  <parent link="base2"/>
+  <child link="balance_wheel_mount_back"/>
   <axis xyz="0.0 1.0 0.0"/>
 </joint>
 
-<joint name="back_caster_wheel_joint" type="continuous">
-  <origin rpy="0 0 0" xyz="0 -0.0275 -0.02"/>
-  <parent link="back_caster_side"/>
-  <child link="back_caster_wheel"/>
+<joint name="base_balance_front" type="fixed">
+  <origin rpy="0 0 0" xyz="-0.15 0 0.05"/>
+  <parent link="base2"/>
+  <child link="balance_wheel_mount_front"/>
   <axis xyz="0.0 1.0 0.0"/>
 </joint>
+
+<joint name="balance_ball_front" type="continuous">
+  <origin rpy="0 0 0" xyz="0 0 -0.03"/>
+  <parent link="balance_wheel_mount_front"/>
+  <child link="balance_ball_front"/>
+  <axis xyz="0.0 1.0 0.0"/>
+</joint>
+
+<joint name="balance_ball_back" type="continuous">
+  <origin rpy="0 0 0" xyz="0 0 -0.03"/>
+  <parent link="balance_wheel_mount_back"/>
+  <child link="balance_ball_back"/>
+  <axis xyz="0.0 1.0 0.0"/>
+</joint>
+
 
 <joint name="base_to_left_wheel" type="continuous">
   <origin rpy="0 0 0" xyz="0 -0.225 0.1"/>
@@ -266,6 +224,7 @@
   <child link="right_wheel"/>
   <axis xyz="0.0 1.0 0.0"/>
 </joint>
+
 <transmission name="tran1">
   <type>transmission_interface/SimpleTransmission</type>
   <joint name="base_to_left_wheel">
