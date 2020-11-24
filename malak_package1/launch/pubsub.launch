@@ -1,0 +1,4 @@
+<launch>
+	<node name="talker_node" pkg="malak_package1" type="talker.py" output="screen" />
+	<node name="listener_node" pkg="malak_package1" type="listener.py" output="screen" />
+</launch>
