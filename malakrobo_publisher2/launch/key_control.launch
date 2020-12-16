@@ -1,0 +1,3 @@
+<launch>
+	<node name="command_publisher" pkg="malakrobo_publisher" type="teleop_key.py" output="screen" />
+</launch>
