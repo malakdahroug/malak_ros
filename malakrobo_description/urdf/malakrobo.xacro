@@ -325,6 +325,28 @@
     </inertial>
   </link>
 
+  <link name="sensor_base">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.2"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.05 0.05 0.2"/>
+      </geometry>
+    </visual>
+
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
   <link name="camera">
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -354,7 +376,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-    <box size="0.1 0.1 0.1"/>
+        <box size="0.1 0.1 0.1"/>
       </geometry>
     </collision>
 
@@ -372,17 +394,24 @@
     </inertial>
   </link>
 
+  <joint name="sensor_base_joint" type="fixed">
+    <axis xyz="0 0 0" />
+    <origin xyz="-0.15 0 0.20" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="sensor_base"/>
+  </joint>
+
   <joint name="camera_joint" type="fixed">
     <axis xyz="0 0 0" />
-    <origin xyz="-0.025 0 0.1" rpy="0 0 3.14"/>
-    <parent link="base_fence"/>
+    <origin xyz="-0.025 0 0.05" rpy="0 0 3.14"/>
+    <parent link="sensor_base"/>
     <child link="camera"/>
   </joint>
 
   <joint name="hokuyo_joint" type="fixed">
     <axis xyz="0 1 0" />
-    <origin xyz="0 0 0.45" rpy="0 0 3.14"/>
-    <parent link="base_link"/>
+    <origin xyz="0 0 0.13" rpy="0 0 3.14"/>
+    <parent link="sensor_base"/>
     <child link="hokuyo"/>
   </joint>
 
