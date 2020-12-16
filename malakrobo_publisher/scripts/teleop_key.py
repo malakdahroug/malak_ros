@@ -14,11 +14,11 @@ modRight = 0.0 # Modifier of the right wheel position, used to pass the right va
 def on_press(key):
 	global modLeft, modRight # Defining globals as the values are meant to be use outside of this function
 	if key == keyboard.Key.up: # Arrow up - modifiers set for the robot to go forward
-		modLeft = 0.05
-		modRight = 0.05
-	elif key == keyboard.Key.down: # Arrow down - modifiers set for the robot to go back
 		modLeft = -0.05
 		modRight = -0.05
+	elif key == keyboard.Key.down: # Arrow down - modifiers set for the robot to go back
+		modLeft = 0.05
+		modRight = 0.05
 	elif key == keyboard.Key.left: # Arrow left - modifiers set for the robot to turn right
 		modLeft = 0.05
 		modRight = -0.05
