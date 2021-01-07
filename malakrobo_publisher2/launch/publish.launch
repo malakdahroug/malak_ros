@@ -1,3 +1,0 @@
-<launch>
-	<node name="command_publisher" pkg="malakrobo_publisher" type="talker.py" output="screen" />
-</launch>

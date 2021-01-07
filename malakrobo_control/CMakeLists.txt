@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(malakrobo_control)
+project(malakrobo_control2)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -105,7 +105,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES robo3_control
-#  CATKIN_DEPENDS controller_manager joint_state_controller robot_state_publisher
+#  CATKIN_DEPENDS controller_manager joint_state_controller robot_state_publisher mobile_base_controller
 #  DEPENDS system_lib
 )
 
