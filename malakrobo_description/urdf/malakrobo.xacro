@@ -4,7 +4,7 @@
   <xacro:property name="cameraMass" value="0.1"/>
   <xacro:include filename="$(find malakrobo_description)/urdf/materials.xacro" />
   <xacro:include filename="$(find malakrobo_description)/urdf/malakrobo.gazebo" />
-  <link name="base_link">
+  <link name="base2">
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.1"/>
       <geometry>
@@ -24,7 +24,7 @@
     </inertial>
   </link>
 
-  <link name="base2">
+  <link name="base_link">
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.1"/>
       <geometry>
@@ -397,7 +397,7 @@
   <joint name="sensor_base_joint" type="fixed">
     <axis xyz="0 0 0" />
     <origin xyz="0.15 0 0.20" rpy="0 0 3.14"/>
-    <parent link="base_link"/>
+    <parent link="base2"/>
     <child link="sensor_base"/>
   </joint>
 
@@ -425,7 +425,7 @@
 
   <joint name="base2_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0.15 0 0"/>
-    <parent link="base_link"/>
+    <parent link="base2"/>
     <child link="base3"/>
     <axis xyz="0.0 0.0 0.0"/>
   </joint>
@@ -467,14 +467,14 @@
 
   <joint name="front_caster_base_joint" type="continuous">
     <origin rpy="0 0 0" xyz="0.15 0 0.08"/>
-    <parent link="base_link"/>
+    <parent link="base2"/>
     <child link="front_caster_base"/>
     <axis xyz="0.0 0.0 1.0"/>
   </joint>
 
   <joint name="back_caster_base_joint" type="continuous">
     <origin rpy="0 0 0" xyz="-0.15 0 0.08"/>
-    <parent link="base_link"/>
+    <parent link="base2"/>
     <child link="back_caster_base"/>
     <axis xyz="0.0 0.0 1.0"/>
   </joint>
@@ -509,34 +509,90 @@
 
   <joint name="base_to_right_wheel" type="continuous">
     <origin rpy="0 0 0" xyz="0 -0.225 0.1"/>
-    <parent link="base2"/>
+    <parent link="base_link"/>
     <child link="right_wheel"/>
     <axis xyz="0.0 1.0 0.0"/>
   </joint>
 
   <joint name="base_to_left_wheel" type="continuous">
     <origin rpy="0 0 0" xyz="0 0.225 0.1"/>
-    <parent link="base2"/>
+    <parent link="base_link"/>
     <child link="left_wheel"/>
     <axis xyz="0.0 1.0 0.0"/>
   </joint>
+
   <transmission name="tran1">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="base_to_right_wheel">
-      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
     </joint>
     <actuator name="right_wheel">
-      <hardwareInterface>EffortJointInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>7</mechanicalReduction>
     </actuator>
   </transmission>
 
   <transmission name="tran2">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="base_to_left_wheel">
-      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
     </joint>
     <actuator name="left_wheel">
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>7</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="front_caster_base_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="front_caster_base">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="front_caster_base_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="front_caster_base">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran4">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="back_caster_base_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="back_caster_base">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+    <transmission name="tran5">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="front_caster_wheel_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="front_caster_wheel">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran6">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="back_caster_wheel_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="back_caster_wheel">
       <hardwareInterface>EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>

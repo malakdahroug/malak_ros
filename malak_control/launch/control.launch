@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+    <param command="$(find xacro)/xacro $(find malakrobo_description)/urdf/malakrobo.xacro" name="robot_description"/>
+
+    <node args="-param robot_description -urdf -x 0.5 -y 2.1 -z 0.05 -Y 1.57 -model malakrobo" name="spawn_urdf"
+          pkg="gazebo_ros" type="spawn_model"/>
+
+    <node pkg="tf"
+          type="static_transform_publisher"
+          name="static_base_broadcaster"
+          args="0 0 0 0 0 0 malakrobo base_link 100"/>
+
+    <rosparam file="$(find malak_control)/config/diff_drive.yaml" command="load"/>
+
+    <node name="controller_spawner" pkg="controller_manager" type="spawner"
+          respawn="false" output="screen" ns="/malakrobo" args="joint_state_controller mobile_base_controller"/>
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" respawn="false"
+          output="screen">
+        <param name="robot_description"
+               command="$(find xacro)/xacro.py '$(find malakrobo_description)/urdf/malakrobo.xacro'"/>
+        <remap from="/joint_states" to="/malakrobo/joint_states"/>
+    </node>
+
+</launch>
