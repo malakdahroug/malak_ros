@@ -528,7 +528,7 @@
     </joint>
     <actuator name="right_wheel">
       <hardwareInterface>VelocityJointInterface</hardwareInterface>
-      <mechanicalReduction>7</mechanicalReduction>
+      <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
 
@@ -539,7 +539,7 @@
     </joint>
     <actuator name="left_wheel">
       <hardwareInterface>VelocityJointInterface</hardwareInterface>
-      <mechanicalReduction>7</mechanicalReduction>
+      <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
 
