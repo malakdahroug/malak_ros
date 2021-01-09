@@ -2,9 +2,9 @@
 <launch>
     <!-- run gmapping to map the floor -->
     <node pkg="gmapping" type="slam_gmapping" name="gmapping" output="screen">
-      <remap from="/malakrobo/mobile_base_controller/odom" to="/odom"/>
       <remap from="/scan" to="/malakrobo/laser/scan"/>
-      <param name="base_frame" value="base_footprint"/>
+      <remap from="/odom" to="/malakrobo/mobile_base_controller/odom"/>
+      <param name="base_frame" value="base_link"/>
       <param name="map_frame" value="map"/>
       <param name="odom_frame" value="odom"/>
       <param name="map_update_interval" value="5.0"/>

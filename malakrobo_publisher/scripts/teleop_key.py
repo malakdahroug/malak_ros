@@ -43,7 +43,7 @@ def talker():
     global move_cmd  # Defining globals - it will indicate to use variable from outer scope
     # Defining publishers that will be publishing twist messages
     pub = rospy.Publisher('/malakrobo/mobile_base_controller/cmd_vel', Twist, queue_size=1)
-    rate = rospy.Rate(5)  # Publishing rate for messages - 5 msgs a second
+    rate = rospy.Rate(25)  # Publishing rate for messages - 25 msgs a second
     while True:  # Keeps publishing messages
         pub.publish(move_cmd)  # Publishing values
         rate.sleep()  # Pauses execution for duration based on the rate given above
