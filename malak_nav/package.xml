@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>malak_nav</name>
+  <version>0.0.0</version>
+  <description>
+    The malak_nav provides roslaunch scripts for starting the navigation.
+  </description>
+  <license>Apache 2.0</license>
+  <author email="md1330@live.mdx.ac.uk">Malak Dahroug</author>
+  <maintainer email="md1330@live.mdx.ac.uk">Malak Dahroug</maintainer>
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>amcl</exec_depend>
+  <exec_depend>map_server</exec_depend>
+  <exec_depend>move_base</exec_depend>
+</package>
