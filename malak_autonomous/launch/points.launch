@@ -1,0 +1,3 @@
+<launch>
+	<node name="command_publisher" pkg="malak_autonomous" type="point_list.py" output="screen" />
+</launch>
