@@ -27,6 +27,7 @@
       <robotBaseFrame>malakrobo</robotBaseFrame>
       <publishWheelTF>true</publishWheelTF>
       <publishWheelJointState>true</publishWheelJointState>
+      <publishOdomTF>false</publishOdomTF>
     </plugin>
   </gazebo>
 
@@ -139,8 +140,8 @@
       <ray>
         <scan>
           <horizontal>
-            <samples>1080</samples>
-            <resolution>0.25</resolution>
+            <samples>720</samples>
+            <resolution>1</resolution>
             <min_angle>-1.57079632679</min_angle>
             <max_angle>1.57079632679</max_angle>
           </horizontal>

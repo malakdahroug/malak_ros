@@ -3,6 +3,7 @@
   <arg name="map_file" default="$(find malak_nav)/maps/map.yaml"/>
   <arg name="open_rviz" default="true"/>
   <arg name="move_forward_only" default="false"/>
+  <param name="/use_sim_time" value="true"/>
 
   <!-- Turtlebot3 -->
   <include file="$(find malak_control)/launch/control.launch"/>
@@ -12,9 +13,12 @@
     <param name="frame_id" value="map"/>
   </node>
 
+<!--  <node pkg="tf" type="static_transform_publisher" name="map_odom_broadcaster"-->
+<!--      args="0 0 0 0 0 0 map odom 100"/>-->
+
+
   <!-- AMCL -->
   <include file="$(find malak_nav)/launch/amcl.launch"/>
-<!--  <node pkg ="tf" 	type="static_transform_publisher" 	name="map_to_odom_link"  	args="0.0 0.0 0.0 0.0 0.0 0.0 /map /odom 40"/>-->
 
 
   <!-- move_base -->

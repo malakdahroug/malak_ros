@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
+<!--    <include file="$(find malak_control)/launch/control.launch"/>-->
+<!--    <param name="/use_sim_time" value="true"/>-->
     <!-- run gmapping to map the floor -->
     <node pkg="gmapping" type="slam_gmapping" name="gmapping" output="screen">
       <remap from="/scan" to="/malakrobo/laser/scan"/>
@@ -25,7 +27,7 @@
       <param name="angularUpdate" value="0.5"/>
       <param name="temporalUpdate" value="3.0"/>
       <param name="resampleThreshold" value="0.5"/>
-      <param name="particles" value="30"/>
+      <param name="particles" value="80"/>
       <param name="xmin" value="-5.0"/>
       <param name="ymin" value="-5.0"/>
       <param name="xmax" value="5.0"/>
@@ -37,6 +39,6 @@
       <param name="lasamplestep" value="0.005"/>
     </node>
 
-    <node name="rviz" pkg="rviz" type="rviz"/>
+<!--    <node name="rviz" pkg="rviz" type="rviz"/>-->
 
 </launch>

@@ -396,14 +396,14 @@
 
   <joint name="sensor_base_joint" type="fixed">
     <axis xyz="0 0 0" />
-    <origin xyz="0.15 0 0.20" rpy="0 0 3.14"/>
+    <origin xyz="0 0 0.20" rpy="0 0 3.14"/>
     <parent link="base2"/>
     <child link="sensor_base"/>
   </joint>
 
   <joint name="camera_joint" type="fixed">
     <axis xyz="0 0 0" />
-    <origin xyz="0.025 0 0.05" rpy="0 0 3.14"/>
+    <origin xyz="-0.025 0 0.05" rpy="0 0 3.14"/>
     <parent link="sensor_base"/>
     <child link="camera"/>
   </joint>

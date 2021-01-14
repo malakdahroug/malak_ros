@@ -9,5 +9,4 @@
     <arg name="headless" value="false"/>
     <arg name="debug" value="false"/>
   </include>
-
 </launch>
