@@ -1,0 +1,3 @@
+<launch>
+	<node name="command_publisher" pkg="malak_autonomous" type="pose_next.py" output="screen" />
+</launch>

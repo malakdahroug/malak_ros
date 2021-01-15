@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<launch>
+    <param name="/use_sim_time" value="true"/>
+    <!--- Run gmapping -->
+    <node pkg="gmapping" name="slam_gmapping" type="slam_gmapping" output="screen">
+        <remap from="/scan" to="/malakrobo/laser/scan"/>
+        <remap from="/odom" to="/malakrobo/mobile_base_controller/odom"/>
+        <param name="base_frame" value="base_link"/>
+        <param name="map_frame" value="map"/>
+        <param name="odom_frame" value="odom"/>
+        <param name="delta" value="0.01"/>
+        <param name="xmin" value="-5"/>
+        <param name="xmax" value="5"/>
+        <param name="ymin" value="-5"/>
+        <param name="ymax" value="5"/>
+
+        <param name="linearUpdate" value="0.5"/>
+        <param name="angularUpdate" value="0.436"/>
+        <param name="temporalUpdate" value="-1.0"/>
+        <param name="resampleThreshold" value="0.5"/>
+        <param name="particles" value="80"/>
+
+    </node>
+
+    <node name="rviz" pkg="rviz" type="rviz"/>
+</launch>

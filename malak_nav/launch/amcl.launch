@@ -8,6 +8,11 @@
   <!-- AMCL -->
   <node pkg="amcl" type="amcl" name="amcl">
     <remap from="scan"                      to="$(arg scan_topic)"/>
+    <param name="odom_model_type" value="diff-corrected"/>
+    <param name="base_frame_id" value="base_link"/>
+    <param name="update_min_d" value="0.02"/>
+    <param name="update_min_a" value="0.05"/>
+    <param name="min_particles" value="500"/>
 <!--    <param name="min_particles"             value="500"/>-->
 <!--    <param name="max_particles"             value="3000"/>-->
 <!--    <param name="kld_err"                   value="0.02"/>-->

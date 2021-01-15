@@ -211,3 +211,8 @@ include_directories(
 catkin_install_python(PROGRAMS scripts/point_list.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+
+catkin_install_python(PROGRAMS scripts/pose_next.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+

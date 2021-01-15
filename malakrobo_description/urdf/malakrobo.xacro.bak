@@ -1,104 +1,600 @@
 <?xml version="1.0" ?>
 <robot name="malakrobo" xmlns:xacro="http://www.ros.org/wiki/xacro">
-<xacro:include filename="$(find malakrobo_description)/urdf/materials.xacro" />
-<xacro:include filename="$(find malakrobo_description)/urdf/malakrobo.gazebo" />
-<link name="base_link">
+  <xacro:property name="cameraSize" value="0.05"/>
+  <xacro:property name="cameraMass" value="0.1"/>
+  <xacro:include filename="$(find malakrobo_description)/urdf/materials.xacro" />
+  <xacro:include filename="$(find malakrobo_description)/urdf/malakrobo.gazebo" />
+  <link name="base2">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.1"/>
+      <geometry>
+        <cylinder radius="0.2" length="0.02"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.1"/>
+      <geometry>
+        <cylinder radius="0.2" length="0.02"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="100"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+  </link>
+
+  <link name="base_link">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.1"/>
+      <geometry>
+        <box size="0.1 0.4 0.02"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.1"/>
+      <geometry>
+        <box size="0.1 0.4 0.02"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="100"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+  </link>
+
+  <link name="base3">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.1"/>
+      <geometry>
+        <box size="0.15 0.25 0.02"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.1"/>
+      <geometry>
+        <box size="0.15 0.25 0.02"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+  </link>
+
+  <link name="base_fence">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0.1"/>
+      <geometry>
+        <box size="0.02 0.25 0.1"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0.1"/>
+      <geometry>
+        <box size="0.02 0.25 0.1"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+  </link>
+
+  <link name="left_fence">
+    <visual>
+      <origin rpy="1.0 1.57 1.57" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.01 0.12"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="1.57 -1.0 1.57" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.01 0.12"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+  </link>
+
+  <link name="right_fence">
+    <visual>
+      <origin rpy="-1.0 1.57 1.57" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.01 0.12"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="1.57 1.0 1.57" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.01 0.12"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="1"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+  </link>
+
+  <link name="left_fence_front">
   <visual>
-    <origin rpy="0 0 0" xyz="0 0 0.1"/>
-    <geometry>
-      <box size="0.1 0.1 0.1"/>
-    </geometry>
-    <material name="silver"/>
+  <origin rpy="1.5 1.57 1.57" xyz="0 0 0"/>
+  <geometry>
+    <box size="0.1 0.01 0.075"/>
+  </geometry>
   </visual>
   <collision>
-    <origin rpy="0 0 0" xyz="0 0 0.1"/>
-    <geometry>
-      <box size="0.1 0.1 0.1"/>
-    </geometry>
+  <origin rpy="1.57 -1.5 1.57" xyz="0 0 0"/>
+  <geometry>
+    <box size="0.1 0.01 0.075"/>
+  </geometry>
   </collision>
   <inertial>
-    <mass value="0.5"/>
-    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <mass value="1"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
     <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
   </inertial>
-</link>
+  </link>
 
-<link name="left_wheel">
+  <link name="right_fence_front">
   <visual>
-    <origin rpy="1.57079633 0 0" xyz="0 0 0"/>
-    <geometry>
-      <cylinder radius="0.1" length="0.05"/>
-    </geometry>
-    <material name="rubber"/>
+  <origin rpy="-1.5 1.57 1.57" xyz="0 0 0"/>
+  <geometry>
+    <box size="0.1 0.01 0.075"/>
+  </geometry>
   </visual>
   <collision>
-    <origin rpy="1.57079633 0 0" xyz="0 0 0"/>
-    <geometry>
-      <cylinder radius="0.1" length="0.05"/>
-    </geometry>
+  <origin rpy="1.57 1.5 1.57" xyz="0 0 0"/>
+  <geometry>
+    <box size="0.1 0.01 0.075"/>
+  </geometry>
   </collision>
   <inertial>
-    <mass value="0.1"/>
-    <origin rpy="1.57079633 0 0" xyz="0 0 0"/>
+    <mass value="1"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
     <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
   </inertial>
-</link>
+  </link>
 
-<link name="right_wheel">
-  <visual>
-    <origin rpy="-1.57079633 0 0" xyz="0 0 0"/>
-    <geometry>
-      <cylinder radius="0.1" length="0.05"/>
-    </geometry>
-    <material name="rubber"/>
-  </visual>
-  <collision>
-    <origin rpy="-1.57079633 0 0" xyz="0 0 0"/>
-    <geometry>
-      <cylinder radius="0.1" length="0.05"/>
-    </geometry>
-  </collision>
-  <inertial>
-    <mass value="0.1"/>
-    <origin rpy="-1.57079633 0 0" xyz="0 0 0"/>
-    <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
-  </inertial>
-</link>
+  <link name="front_caster_base">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.075 0.075 0.02"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.075 0.075 0.02"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+  </link>
 
-<joint name="base_to_left_wheel" type="continuous">
-  <origin rpy="0 0 0" xyz="0 -0.075 0.1"/>
-  <parent link="base_link"/>
-  <child link="left_wheel"/>
-  <axis xyz="0.0 1.0 0.0"/>
-</joint>
+  <link name="back_caster_base">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.075 0.075 0.02"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.075 0.075 0.02"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+  </link>
 
-<joint name="base_to_right_wheel" type="continuous">
-  <origin rpy="0 0 0" xyz="0 0.075 0.1"/>
-  <parent link="base_link"/>
-  <child link="right_wheel"/>
-  <axis xyz="0.0 1.0 0.0"/>
-</joint>
+  <link name="front_caster_side">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.075 0.02 0.05"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.075 0.02 0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+  </link>
+
+  <link name="back_caster_side">
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.075 0.02 0.05"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <box size="0.075 0.02 0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.5"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+  </link>
+
+  <link name="front_caster_wheel">
+    <visual>
+      <origin rpy="1.57 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.03" length="0.035"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="1.57 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.03" length="0.035"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="5"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+  </link>
+
+  <link name="back_caster_wheel">
+    <visual>
+      <origin rpy="-1.57 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.03" length="0.035"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="-1.57 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.03" length="0.035"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="5"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+  </link>
 
 
-<transmission name="tran1">
-  <type>transmission_interface/SimpleTransmission</type>
-  <joint name="base_to_left_wheel">
-    <hardwareInterface>EffortJointInterface</hardwareInterface>
+  <link name="right_wheel">
+    <visual>
+      <origin rpy="1.57 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.1" length="0.05"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="-1.57 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.1" length="0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="10"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="0.027" ixy="0" ixz="0" iyy="0.027" iyz="0" izz="0.05"/>
+    </inertial>
+  </link>
+
+  <link name="left_wheel">
+    <visual>
+      <origin rpy="-1.57 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.1" length="0.05"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="1.57 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.1" length="0.05"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="10"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="0.027" ixy="0" ixz="0" iyy="0.027" iyz="0" izz="0.05"/>
+    </inertial>
+  </link>
+
+  <link name="sensor_base">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.2"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.05 0.05 0.2"/>
+      </geometry>
+    </visual>
+
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+  <link name="camera">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="${cameraSize} ${cameraSize} ${cameraSize}"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="${cameraSize} ${cameraSize} ${cameraSize}"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+
+    <inertial>
+      <mass value="${cameraMass}" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <box_inertia m="${cameraMass}" x="${cameraSize}" y="${cameraSize}" z="${cameraSize}" />
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+  <!-- Hokuyo Laser -->
+  <link name="hokuyo">
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://malakrobo_description/meshes/hokuyo.dae"/>
+      </geometry>
+    </visual>
+
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+  <joint name="sensor_base_joint" type="fixed">
+    <axis xyz="0 0 0" />
+    <origin xyz="0 0 0.20" rpy="0 0 3.14"/>
+    <parent link="base2"/>
+    <child link="sensor_base"/>
   </joint>
-  <actuator name="left_wheel">
-    <hardwareInterface>EffortJointInterface</hardwareInterface>
-    <mechanicalReduction>1</mechanicalReduction>
-  </actuator>
-</transmission>
 
-<transmission name="tran2">
-  <type>transmission_interface/SimpleTransmission</type>
-  <joint name="base_to_right_wheel">
-    <hardwareInterface>EffortJointInterface</hardwareInterface>
+  <joint name="camera_joint" type="fixed">
+    <axis xyz="0 0 0" />
+    <origin xyz="-0.025 0 0.05" rpy="0 0 3.14"/>
+    <parent link="sensor_base"/>
+    <child link="camera"/>
   </joint>
-  <actuator name="right_wheel">
-    <hardwareInterface>EffortJointInterface</hardwareInterface>
-    <mechanicalReduction>1</mechanicalReduction>
-  </actuator>
-</transmission>
+
+  <joint name="hokuyo_joint" type="fixed">
+    <axis xyz="0 1 0" />
+    <origin xyz="0 0 0.13" rpy="0 0 3.14"/>
+    <parent link="sensor_base"/>
+    <child link="hokuyo"/>
+  </joint>
+
+
+  <joint name="base_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="base2"/>
+    <axis xyz="0.0 1.0 0.0"/>
+  </joint>
+
+  <joint name="base2_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.15 0 0"/>
+    <parent link="base2"/>
+    <child link="base3"/>
+    <axis xyz="0.0 0.0 0.0"/>
+  </joint>
+
+  <joint name="base3_base_fence_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.075 0 0"/>
+    <parent link="base3"/>
+    <child link="base_fence"/>
+    <axis xyz="0.0 0.0 0.0"/>
+  </joint>
+
+  <joint name="base_to_left_fence" type="fixed">
+    <origin rpy="0 0 0" xyz="0.055 0.15 0.1"/>
+    <parent link="base_fence"/>
+    <child link="left_fence"/>
+    <axis xyz="0.0 1.0 0.0"/>
+  </joint>
+
+  <joint name="base_to_right_fence" type="fixed">
+    <origin rpy="0 0 0" xyz="0.055 -0.15 0.1"/>
+    <parent link="base_fence"/>
+    <child link="right_fence"/>
+    <axis xyz="0.0 1.0 0.0"/>
+  </joint>
+
+  <joint name="left_fence_to_front" type="fixed">
+    <origin rpy="0 0 0" xyz="0.0855 0.035 0.0"/>
+    <parent link="left_fence"/>
+    <child link="left_fence_front"/>
+    <axis xyz="0.0 1.0 0.0"/>
+  </joint>
+
+  <joint name="right_fence_to_front" type="fixed">
+    <origin rpy="0 0 0" xyz="0.0855 -0.035 0.0"/>
+    <parent link="right_fence"/>
+    <child link="right_fence_front"/>
+    <axis xyz="0.0 1.0 0.0"/>
+  </joint>
+
+  <joint name="front_caster_base_joint" type="continuous">
+    <origin rpy="0 0 0" xyz="0.15 0 0.08"/>
+    <parent link="base2"/>
+    <child link="front_caster_base"/>
+    <axis xyz="0.0 0.0 1.0"/>
+  </joint>
+
+  <joint name="back_caster_base_joint" type="continuous">
+    <origin rpy="0 0 0" xyz="-0.15 0 0.08"/>
+    <parent link="base2"/>
+    <child link="back_caster_base"/>
+    <axis xyz="0.0 0.0 1.0"/>
+  </joint>
+
+  <joint name="front_caster_side_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0.0275 -0.03"/>
+    <parent link="front_caster_base"/>
+    <child link="front_caster_side"/>
+    <axis xyz="0.0 0.0 1.0"/>
+  </joint>
+
+  <joint name="back_caster_side_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0.0275 -0.03"/>
+    <parent link="back_caster_base"/>
+    <child link="back_caster_side"/>
+    <axis xyz="0.0 0.0 1.0"/>
+  </joint>
+
+  <joint name="front_caster_wheel_joint" type="continuous">
+    <origin rpy="0 0 0" xyz="0 -0.0275 -0.02"/>
+    <parent link="front_caster_side"/>
+    <child link="front_caster_wheel"/>
+    <axis xyz="0.0 1.0 0.0"/>
+  </joint>
+
+  <joint name="back_caster_wheel_joint" type="continuous">
+    <origin rpy="0 0 0" xyz="0 -0.0275 -0.02"/>
+    <parent link="back_caster_side"/>
+    <child link="back_caster_wheel"/>
+    <axis xyz="0.0 1.0 0.0"/>
+  </joint>
+
+  <joint name="base_to_right_wheel" type="continuous">
+    <origin rpy="0 0 0" xyz="0 -0.225 0.1"/>
+    <parent link="base_link"/>
+    <child link="right_wheel"/>
+    <axis xyz="0.0 1.0 0.0"/>
+  </joint>
+
+  <joint name="base_to_left_wheel" type="continuous">
+    <origin rpy="0 0 0" xyz="0 0.225 0.1"/>
+    <parent link="base_link"/>
+    <child link="left_wheel"/>
+    <axis xyz="0.0 1.0 0.0"/>
+  </joint>
+
+  <transmission name="tran1">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_to_right_wheel">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="right_wheel">
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran2">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="base_to_left_wheel">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="left_wheel">
+      <hardwareInterface>VelocityJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="front_caster_base_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="front_caster_base">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran3">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="front_caster_base_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="front_caster_base">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran4">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="back_caster_base_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="back_caster_base">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+    <transmission name="tran5">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="front_caster_wheel_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="front_caster_wheel">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
+
+  <transmission name="tran6">
+    <type>transmission_interface/SimpleTransmission</type>
+    <joint name="back_caster_wheel_joint">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+    </joint>
+    <actuator name="back_caster_wheel">
+      <hardwareInterface>EffortJointInterface</hardwareInterface>
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+  </transmission>
 </robot>

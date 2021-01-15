@@ -24,3 +24,6 @@ TrajectoryPlannerROS:
   vx_samples: 18
   vtheta_samples: 20
   sim_granularity: 0.05
+
+  meter_scoring: true
+  occdist_scale:  0.1
