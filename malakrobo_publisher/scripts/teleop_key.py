@@ -14,11 +14,12 @@ move_cmd.linear.z = 0.0
 move_cmd.angular.x = 0.0
 move_cmd.angular.y = 0.0
 move_cmd.angular.z = 0.0
-
+movement = 0
+stopped = False
 
 # Callback function, called when the key is released - it sets twist message properties to 0.0 so the robot stops moving
 def on_release(key):
-    global move_cmd
+    global move_cmd, stopped
     if key == keyboard.Key.up or key == keyboard.Key.down:  # If key up/down is release it is supposed to reset linear x speed
         move_cmd.linear.x = 0.0  # Reset linear x movement
     if key == keyboard.Key.left or key == keyboard.Key.right:  # If key left/right is release it is supposed to reset angular z speed
@@ -27,7 +28,7 @@ def on_release(key):
 
 # Callback function, called when key is pressed on the keyboard
 def on_press(key):
-    global move_cmd  # Defining globals as the values are meant to be use outside of this function
+    global move_cmd, stopped  # Defining globals as the values are meant to be use outside of this function
     if key == keyboard.Key.up:  # Arrow up - twist message set for the robot to go forward
         move_cmd.linear.x = 0.5
     elif key == keyboard.Key.down:  # Arrow down - twist message set for the robot to go back
@@ -38,14 +39,23 @@ def on_press(key):
         move_cmd.angular.z = -0.5
 
 
+
 # Function responsible for publishing Twist messages
 def talker():
-    global move_cmd  # Defining globals - it will indicate to use variable from outer scope
+    global move_cmd, stopped  # Defining globals - it will indicate to use variable from outer scope
     # Defining publishers that will be publishing twist messages
     pub = rospy.Publisher('/malakrobo/mobile_base_controller/cmd_vel', Twist, queue_size=1)
     rate = rospy.Rate(25)  # Publishing rate for messages - 25 msgs a second
     while True:  # Keeps publishing messages
-        pub.publish(move_cmd)  # Publishing values
+
+        if move_cmd.angular.z == 0 and move_cmd.linear.x == 0:
+            if not stopped:
+                pub.publish(move_cmd)
+                stopped = True
+        else:
+            stopped = False
+        if not stopped:
+            pub.publish(move_cmd)  # Publishing values
         rate.sleep()  # Pauses execution for duration based on the rate given above
 
 
