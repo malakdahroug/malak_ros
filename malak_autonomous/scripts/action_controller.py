@@ -5,6 +5,7 @@ import rospy
 import numpy as np
 from std_msgs.msg import Float32MultiArray, Float64
 from geometry_msgs.msg import Twist
+from sensor_msgs.msg import JointState
 
 camera_center = 400
 
@@ -15,7 +16,6 @@ msg_count = 0
 detected = True
 angular_speed = 0
 linear_speed = 0
-movements = 0
 
 def talker(data):
     global camera_center, max_ang_vel, detected, angular_speed, linear_speed
@@ -64,12 +64,12 @@ def listener():
     control_robot()
     rospy.spin()
 
-def control_robot():
-    global detected, angular_speed, linear_speed, movements
 
+
+def control_robot():
+    global detected, angular_speed, linear_speed
     pub_velocity = rospy.Publisher('/malakrobo/mobile_base_controller/cmd_vel', Twist, queue_size=1)
-    pub_claw_left = rospy.Publisher('/malakrobo/left_fence_to_front_controller/command', Float64, queue_size=1)
-    pub_claw_right = rospy.Publisher('/malakrobo/right_fence_to_front_controller/command', Float64, queue_size=1)
+
 
     rate = rospy.Rate(5)  # Publishing rate for messages - 25 msgs a second
     while True:
@@ -82,28 +82,7 @@ def control_robot():
         move_cmd.angular.y = 0.0
         move_cmd.angular.z = angular_speed
         pub_velocity.publish(move_cmd)  # Publishing values
-        movements += 1
         rate.sleep()
-
-        if movements > 100:
-            left_position = 6.28
-            right_position = 0
-            modifier = 0.02
-            executed = False
-
-            if not detected:
-                while left_position >= 5.28 and right_position <= 1.0:
-                    print('Closing')
-                    left_position -= modifier
-                    right_position += modifier
-                    pub_claw_left.publish(left_position)
-                    pub_claw_right.publish(right_position)
-                    rate.sleep()
-                    executed = True
-                if executed:
-                    movements = 0
-                    executed = False
-
 
 
 if __name__ == '__main__':

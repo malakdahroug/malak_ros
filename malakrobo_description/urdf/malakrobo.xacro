@@ -450,14 +450,14 @@
     <axis xyz="0.0 1.0 0.0"/>
   </joint>
 
-  <joint name="left_fence_to_front" type="continuous">
+  <joint name="left_fence_to_front" type="fixed">
     <origin rpy="0 0 0" xyz="0.045 0.030 0.0"/>
     <parent link="left_fence"/>
     <child link="left_fence_front"/>
     <axis xyz="0.0 0.0 1.0"/>
   </joint>
 
-  <joint name="right_fence_to_front" type="continuous">
+  <joint name="right_fence_to_front" type="fixed">
     <origin rpy="0 0 0" xyz="0.045 -0.030 0.0"/>
     <parent link="right_fence"/>
     <child link="right_fence_front"/>
@@ -597,23 +597,23 @@
     </actuator>
   </transmission>
 
-  <transmission name="tran7">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="left_fence_to_front">
-      <hardwareInterface>EffortJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="left_fence_front">
-      <hardwareInterface>EffortJointInterface</hardwareInterface>
-    </actuator>
-  </transmission>
+<!--  <transmission name="tran7">-->
+<!--    <type>transmission_interface/SimpleTransmission</type>-->
+<!--    <joint name="left_fence_to_front">-->
+<!--      <hardwareInterface>EffortJointInterface</hardwareInterface>-->
+<!--    </joint>-->
+<!--    <actuator name="left_fence_front">-->
+<!--      <hardwareInterface>EffortJointInterface</hardwareInterface>-->
+<!--    </actuator>-->
+<!--  </transmission>-->
 
-  <transmission name="tran8">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="right_fence_to_front">
-      <hardwareInterface>EffortJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="right_fence_front">
-      <hardwareInterface>EffortJointInterface</hardwareInterface>
-    </actuator>
-  </transmission>
+<!--  <transmission name="tran8">-->
+<!--    <type>transmission_interface/SimpleTransmission</type>-->
+<!--    <joint name="right_fence_to_front">-->
+<!--      <hardwareInterface>EffortJointInterface</hardwareInterface>-->
+<!--    </joint>-->
+<!--    <actuator name="right_fence_front">-->
+<!--      <hardwareInterface>EffortJointInterface</hardwareInterface>-->
+<!--    </actuator>-->
+<!--  </transmission>-->
 </robot>
