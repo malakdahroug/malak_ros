@@ -11,9 +11,10 @@
           args="0 0 0.33 0 0 0 base_link hokuyo 100"/>
 
     <rosparam file="$(find malak_control)/config/diff_drive.yaml" command="load"/>
+    <rosparam file="$(find malak_control)/config/joint_limits.yaml" command="load"/>
 
     <node name="controller_spawner" pkg="controller_manager" type="spawner"
-          respawn="false" output="screen" ns="/malakrobo" args="joint_state_controller mobile_base_controller"/>
+          respawn="false" output="screen" ns="/malakrobo" args="joint_state_controller mobile_base_controller left_fence_to_front_controller right_fence_to_front_controller"/>
 
       <!-- send fake joint values -->
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
