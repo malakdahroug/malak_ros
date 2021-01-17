@@ -3,7 +3,6 @@
 
     <arg name="teach" default="false"/>
     <arg name="recognize" default="true"/>
-    <arg name="settings_path" default="~/.ros/find_object_2d.ini"/>
 
     <node pkg="find_object_2d" type="find_object_2d" name="find_object_2d">
         <remap from="rgb/image_rect_color" to="/malakrobo/camera1/rgb/image_raw"/>
@@ -11,10 +10,10 @@
 		<remap from="depth_registered/camera_info" to="/malakrobo/camera1/depth/camera_info"/>
 
         <param name="subscribe_depth" value="true" type="bool"/>
-        <param name="settings_path" value="$(arg settings_path)" type="str"/>
+        <param name="settings_path" value="$(find malak_autonomous)/find_object_2d_config/config.ini" type="str"/>
         <param name="gui" value="$(arg teach)"/>
-        <param if="$(arg recognize)" name="objects_path" value="$(find malak_autonomous)/objects/"/>
+        <param if="$(arg recognize)" name="objects_path" value="$(find malak_autonomous)/object2/"/>
     </node>
 
-
+<!--http://0.0.0.0:8080/stream?topic=/malakrobo/camera1/rgb/image_raw stream url-->
 </launch>

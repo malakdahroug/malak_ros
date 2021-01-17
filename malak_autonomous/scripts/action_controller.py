@@ -14,9 +14,10 @@ ang_vel = 0
 msg_count = 0
 detected = True
 angular_speed = 0
+linear_speed = 0
 
 def talker(data):
-    global camera_center, max_ang_vel, detected, angular_speed
+    global camera_center, max_ang_vel, detected, angular_speed, linear_speed
     if len(data.data) > 0:
         object_id = data.data[0]
         object_width = data.data[1]
@@ -44,14 +45,18 @@ def talker(data):
 
             elif ang_vel > 0:
                 angular_speed = max_ang_vel
+
+        if (camera_center - 25) <= x_pos <= (camera_center + 25):
+            detected = True
+            linear_speed = 0.1
         else:
             detected = False
-            angular_speed = 0
 
         # print(object_id, object_width, object_height, speed_coefficient, result)
     else:
         detected = False
         angular_speed = 0
+        linear_speed = 0
 
 
 def listener():
@@ -60,14 +65,14 @@ def listener():
     rospy.spin()
 
 def turn():
-    global detected, angular_speed
+    global detected, angular_speed, linear_speed
 
     pub = rospy.Publisher('/malakrobo/mobile_base_controller/cmd_vel', Twist, queue_size=1)
     rate = rospy.Rate(5)  # Publishing rate for messages - 25 msgs a second
     while True:
         move_cmd = Twist()  # Defining a message that will be modified depedning on the keyboard keys pressed
 
-        move_cmd.linear.x = 0.0
+        move_cmd.linear.x = linear_speed
         move_cmd.linear.y = 0.0
         move_cmd.linear.z = 0.0
         move_cmd.angular.x = 0.0
