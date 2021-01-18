@@ -1,0 +1,10 @@
+<launch>
+    <param name="gui_file" type="str" value="$(find malak_gui)/scripts/main.ui"/>
+
+    <include file="$(find assessment_world)/launch/assessment_world.launch"/>
+    <include file="$(find assessment_world)/launch/objects.launch"/>
+    <include file="$(find malak_nav)/launch/malak_nav.launch"/>
+    <include file="$(find malak_autonomous)/launch/2d_object.launch"/>
+
+    <node name="full_system" pkg="malak_gui" type="main.py" output="screen"/>
+</launch>

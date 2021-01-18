@@ -1,0 +1,4 @@
+<launch>
+	<param name="gui_file" type="str" value="$(find malak_gui)/scripts/main.ui"/>
+	<node name="control_panel" pkg="malak_gui" type="main.py" output="screen"/>
+</launch>

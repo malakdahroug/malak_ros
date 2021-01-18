@@ -204,6 +204,12 @@ Visualization Manager:
           Value: true
         map:
           Value: true
+        object_107:
+          Value: true
+        object_109:
+          Value: true
+        object_110:
+          Value: true
         odom:
           Value: true
         right_fence:
@@ -242,7 +248,12 @@ Visualization Manager:
                       {}
                 sensor_base:
                   camera:
-                    {}
+                    object_107:
+                      {}
+                    object_109:
+                      {}
+                    object_110:
+                      {}
                   laser:
                     {}
               hokuyo:
@@ -266,7 +277,7 @@ Visualization Manager:
     - Class: rviz/Camera
       Enabled: true
       Image Rendering: background and overlay
-      Image Topic: /malakrobo/camera1/image_raw
+      Image Topic: /malakrobo/camera1/rgb/image_raw
       Name: Camera
       Overlay Alpha: 0.5
       Queue Size: 2

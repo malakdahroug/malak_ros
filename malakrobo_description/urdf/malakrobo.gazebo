@@ -99,6 +99,7 @@
 <gazebo reference="camera">
   <material>Gazebo/Green</material>
   <sensor type="depth" name="camera1">
+  <pose>-0.025 0 0.28 0 0 4.71</pose>
     <update_rate>30.0</update_rate>
     <camera name="head">
       <horizontal_fov>1.3962634</horizontal_fov><!--69.4 deg = 1.211258501 rad -->

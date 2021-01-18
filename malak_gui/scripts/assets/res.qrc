@@ -1,0 +1,12 @@
+<RCC>
+  <qresource prefix="icon">
+    <file>do-le.png</file>
+    <file>do.png</file>
+    <file>le-up.png</file>
+    <file>le.png</file>
+    <file>ri-do.png</file>
+    <file>ri.png</file>
+    <file>up-ri.png</file>
+    <file>up.png</file>
+  </qresource>
+</RCC>

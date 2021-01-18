@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>malak_autonomous</name>
+  <name>malak_gui</name>
   <version>0.1.0</version>
-  <description>The malak_autonomous package-PDE3432 Mobile Robotics (go from point to point)</description>
+  <description>The malak_gui package-PDE3432 Mobile Robotics (offers user interface to control the robot)</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
@@ -52,19 +52,15 @@
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
   <build_depend>std_msgs</build_depend>
-  <build_depend>cv2</build_depend>
-  <build_depend>numpy</build_depend>
+  <build_depend>PyQt5</build_depend>
   <build_export_depend>roscpp</build_export_depend>
   <build_export_depend>rospy</build_export_depend>
   <build_export_depend>std_msgs</build_export_depend>
-  <build_export_depend>cv2</build_export_depend>
-  <build_export_depend>numpy</build_export_depend>
+  <build_export_depend>PyQt5</build_export_depend>
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
-  <exec_depend>cv2</exec_depend>
-  <exec_depend>numpy</exec_depend>
-
+  <exec_depend>PyQt5</exec_depend>
 
   <!-- The export tag contains other, unspecified, tags -->
   <export>

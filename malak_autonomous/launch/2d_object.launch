@@ -15,5 +15,6 @@
         <param if="$(arg recognize)" name="objects_path" value="$(find malak_autonomous)/object2/"/>
     </node>
 
+
 <!--http://0.0.0.0:8080/stream?topic=/malakrobo/camera1/rgb/image_raw stream url-->
 </launch>
