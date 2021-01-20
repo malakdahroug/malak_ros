@@ -2462,7 +2462,7 @@ or using arrow keys on your keyboard</string>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_4">
+        <widget class="QPushButton" name="take_ball_goal_btn">
          <property name="text">
           <string>Take ball to goal</string>
          </property>
@@ -2497,16 +2497,16 @@ or using arrow keys on your keyboard</string>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_8">
+        <widget class="QPushButton" name="obj_det_btn">
          <property name="text">
           <string>Start visual recognition</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_10">
+        <widget class="QPushButton" name="suction_btn">
          <property name="text">
-          <string>Open/close grippers</string>
+          <string>Start/stop suction cup</string>
          </property>
         </widget>
        </item>
@@ -2546,7 +2546,7 @@ or using arrow keys on your keyboard</string>
        <rect>
         <x>530</x>
         <y>30</y>
-        <width>211</width>
+        <width>251</width>
         <height>351</height>
        </rect>
       </property>
@@ -2554,7 +2554,7 @@ or using arrow keys on your keyboard</string>
        <item row="5" column="0">
         <widget class="QLabel" name="label_7">
          <property name="text">
-          <string>Gripper state:</string>
+          <string>Suction cup state</string>
          </property>
         </widget>
        </item>
@@ -2662,7 +2662,7 @@ or using arrow keys on your keyboard</string>
        <rect>
         <x>530</x>
         <y>30</y>
-        <width>211</width>
+        <width>251</width>
         <height>351</height>
        </rect>
       </property>
@@ -2687,7 +2687,7 @@ or using arrow keys on your keyboard</string>
        <item row="5" column="0">
         <widget class="QLabel" name="label_8">
          <property name="text">
-          <string>Gripper state:</string>
+          <string>Suction cup state</string>
          </property>
         </widget>
        </item>

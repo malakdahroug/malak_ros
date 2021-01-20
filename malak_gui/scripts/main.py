@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 import threading
 
+import cv2
 import rospy
-from std_msgs.msg import String, Float64, Header
+import numpy as np
+from std_msgs.msg import String, Float32MultiArray, Float64, Header, Bool
 from sensor_msgs.msg import JointState
 from geometry_msgs.msg import Twist, PoseWithCovarianceStamped, PoseStamped
 from move_base_msgs.msg import MoveBaseActionGoal, MoveBaseGoal, MoveBaseAction
+from std_srvs.srv import Empty
 from PyQt5 import uic
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -17,14 +20,15 @@ import time
 import actionlib
 from pynput import keyboard  # Contains keyboard operations
 
-move_cmd = Twist()  # Defining a message that will be modified depending on the keyboard keys pressed
-
+# ROBOT MOVEMENT CONTROL PARAMS #
+move_cmd = Twist()
 move_cmd.linear.x = 0.0
 move_cmd.linear.y = 0.0
 move_cmd.linear.z = 0.0
 move_cmd.angular.x = 0.0
 move_cmd.angular.y = 0.0
 move_cmd.angular.z = 0.0
+
 movement = 0
 stopped = False
 tab_index = 0
@@ -34,14 +38,30 @@ goal_text = "Loading..."
 app = QApplication([])
 window = uic.loadUi(rospy.get_param("/gui_file"))
 
+# GUI STATES #
 current_target = -1
-gripper_state = -1
+gripper_state = 0
 ball_detected = -1
-ball_grabbed = -1
 current_action = -1
+arrow_pressed = False
+
+# WORKING VARS #
 pose_count = 0
 current_amcl = PoseWithCovarianceStamped()
 movement_thread_count = 0
+
+# AUTONOMOUS OBJECT RECOGNITION #
+camera_center = 400
+max_ang_vel = 0.1
+min_ang_vel = -0.1
+ang_vel = 0
+detection = False
+sml_ball_grabbed = False
+med_ball_grabbed = False
+lrg_ball_grabbed = False
+no_detection_count = 0
+detection_recovery_count = 0
+detect_cycle_count = 0
 
 
 # Callback function, called when the key is released - it sets twist msg properties to 0.0, so the robot stops moving
@@ -77,63 +97,74 @@ def on_press(key):
 
 
 def forward():
-    global move_cmd, tab_index
+    global move_cmd, tab_index, arrow_pressed
     if tab_index == 0:
+        arrow_pressed = True
         move_cmd.linear.x = 0.5
 
 
 def forward_left():
-    global move_cmd, tab_index
+    global move_cmd, tab_index, arrow_pressed
     if tab_index == 0:
+        arrow_pressed = True
         move_cmd.linear.x = 0.5
         move_cmd.angular.z = 0.5
 
 
 def forward_right():
-    global move_cmd, tab_index
+    global move_cmd, tab_index, arrow_pressed
     if tab_index == 0:
+        arrow_pressed = True
         move_cmd.linear.x = 0.5
         move_cmd.angular.z = -0.5
 
 
 def backward():
-    global move_cmd, tab_index
+    global move_cmd, tab_index, arrow_pressed
     if tab_index == 0:
+        arrow_pressed = True
         move_cmd.linear.x = -0.5
 
 
 def backward_left():
-    global move_cmd, tab_index
+    global move_cmd, tab_index, arrow_pressed
     if tab_index == 0:
+        arrow_pressed = True
         move_cmd.linear.x = -0.5
         move_cmd.angular.z = -0.5
 
 
 def backward_right():
-    global move_cmd, tab_index
+    global move_cmd, tab_index, arrow_pressed
     if tab_index == 0:
+        arrow_pressed = True
         move_cmd.linear.x = -0.5
         move_cmd.angular.z = 0.5
 
 
 def reset_fb():
+    global move_cmd, arrow_pressed
+    arrow_pressed = False
     move_cmd.linear.x = 0.0
 
 
 def left():
-    global move_cmd, tab_index
+    global move_cmd, tab_index, arrow_pressed
     if tab_index == 0:
+        arrow_pressed = True
         move_cmd.angular.z = 0.5
 
 
 def right():
-    global move_cmd, tab_index
+    global move_cmd, tab_index, arrow_pressed
     if tab_index == 0:
+        arrow_pressed = True
         move_cmd.angular.z = -0.5
 
 
 def reset_lr():
-    global move_cmd
+    global move_cmd, arrow_pressed
+    arrow_pressed = False
     move_cmd.angular.z = 0.0
 
 
@@ -194,7 +225,12 @@ def row(pose_index):
         move_cmd.angular.z = 0.0
         pub.publish(move_cmd)
 
-    if pose_index == 0:
+    if pose_index == -1:
+        pose_list = [
+            [1.45, 0.0, 1.0, 0.0],
+            [0.2, 0.0, 1.0, 0.0]
+        ]
+    elif pose_index == 0:
         pose_list = [
             [1.55, 1.4, -0.707, 0.707]
         ]
@@ -234,6 +270,8 @@ def row(pose_index):
             rospy.signal_shutdown("Action server not available!")
             break
 
+    if pose_index == -1:
+        stop_suction()
     movement_thread_count -= 1
     rospy.loginfo("Closing position control thread")
 
@@ -268,11 +306,49 @@ def go_to_row_3():
         movement_thread_count += 1
 
 
+def leave_ball():
+    global movement_thread_count, current_target, current_action, lrg_ball_grabbed, med_ball_grabbed, sml_ball_grabbed
+    pub_thread = threading.Thread(target=row, args=(-1,))
+    if movement_thread_count == 0 and (lrg_ball_grabbed or med_ball_grabbed or sml_ball_grabbed):
+        current_target = 0
+        current_action = 3
+        pub_thread.start()
+        movement_thread_count += 1
+
+
+def object_detection():
+    global detection, movement_thread_count, current_action, gripper_state, detection_recovery_count, no_detection_count
+    if movement_thread_count == 0:
+        detection = True
+        gripper_state = 1
+        start_suction()
+        movement_thread_count += 1
+        current_action = 2
+
+        no_detection_count = 0
+        detection_recovery_count = 0
+
+        print("Object detection: ", detection, gripper_state, movement_thread_count, current_action)
+
+
+def control_suction():
+    global gripper_state
+    if gripper_state == 0:
+        gripper_state = 1
+        start_suction()
+    else:
+        gripper_state = 0
+        stop_suction()
+
+
 # ACTION BUTTONS #
 window.go_to_goal_btn.pressed.connect(go_to_goal)
 window.go_to_row_1_btn.pressed.connect(go_to_row_1)
 window.go_to_row_2_btn.pressed.connect(go_to_row_2)
 window.go_to_row_3_btn.pressed.connect(go_to_row_3)
+window.obj_det_btn.pressed.connect(object_detection)
+window.suction_btn.pressed.connect(control_suction)
+window.take_ball_goal_btn.pressed.connect(leave_ball)
 
 # DIRECTION BUTTONS - PRESSED ACTION #
 window.forBut.pressed.connect(forward)
@@ -315,10 +391,11 @@ def goal_update(data):
 
 
 def gui_update():
-    global amcl_text, gripper_state, ball_grabbed, ball_detected, current_target, stop_threads, current_action, goal_text
+    global amcl_text, gripper_state, ball_detected, current_target, stop_threads, current_action, goal_text, sml_ball_grabbed, med_ball_grabbed, lrg_ball_grabbed, movement_thread_count, detection
 
     targets = ["Goal", "ROW 1", "ROW 2", "ROW 3"]
-    actions = ["GO TO GOAL", "GO TO ROW"]
+    actions = ["GO TO GOAL", "GO TO ROW", "DETECT BALLS", "TAKE BALL TO GOAL", "BALL GRABBED"]
+
     while True:
         if stop_threads:
             break
@@ -328,17 +405,35 @@ def gui_update():
         window.amcl_pose_text_3.setText(amcl_text)
         window.goal_pose_text.setText(goal_text)
 
-        if gripper_state == -1:
-            window.gripper_state.setText("No data yet")
-            window.gripper_state_2.setText("No data yet")
+        if gripper_state == 0:
+            window.gripper_state.setText("Off")
+            window.gripper_state_2.setText("Off")
+        else:
+            window.gripper_state.setText("On")
+            window.gripper_state_2.setText("On")
 
-        if ball_grabbed == -1:
-            window.ball_grabbed.setText("No data yet")
-            window.ball_grabbed_2.setText("No data yet")
+        if sml_ball_grabbed:
+            window.ball_grabbed.setText("True (small)")
+            window.ball_grabbed_2.setText("True (small)")
+        elif med_ball_grabbed:
+            window.ball_grabbed.setText("True (medium)")
+            window.ball_grabbed_2.setText("True (medium)")
+        elif lrg_ball_grabbed:
+            window.ball_grabbed.setText("True (large)")
+            window.ball_grabbed_2.setText("True (large)")
+        else:
+            window.ball_grabbed.setText("False")
+            window.ball_grabbed_2.setText("False")
 
         if ball_detected == -1:
             window.ball_detected.setText("No data yet")
             window.ball_detected_2.setText("No data yet")
+        elif ball_detected == 0:
+            window.ball_detected.setText("False")
+            window.ball_detected_2.setText("False")
+        elif ball_detected == 1:
+            window.ball_detected.setText("True")
+            window.ball_detected_2.setText("True")
 
         if current_target == -1:
             window.current_target.setText("None")
@@ -354,6 +449,34 @@ def gui_update():
 
         time.sleep(1)
     rospy.loginfo("GUI thread closing")
+
+
+def start_suction():
+    rospy.wait_for_service('/malakrobo/vacuum_gripper_large/on')
+    rospy.wait_for_service('/malakrobo/vacuum_gripper_medium/on')
+    rospy.wait_for_service('/malakrobo/vacuum_gripper_small/on')
+
+    large_srv = rospy.ServiceProxy('/malakrobo/vacuum_gripper_large/on', Empty)
+    medium_srv = rospy.ServiceProxy('/malakrobo/vacuum_gripper_medium/on', Empty)
+    small_srv = rospy.ServiceProxy('/malakrobo/vacuum_gripper_small/on', Empty)
+
+    large_srv()
+    medium_srv()
+    small_srv()
+
+
+def stop_suction():
+    rospy.wait_for_service('/malakrobo/vacuum_gripper_large/off')
+    rospy.wait_for_service('/malakrobo/vacuum_gripper_medium/off')
+    rospy.wait_for_service('/malakrobo/vacuum_gripper_small/off')
+
+    large_srv = rospy.ServiceProxy('/malakrobo/vacuum_gripper_large/off', Empty)
+    medium_srv = rospy.ServiceProxy('/malakrobo/vacuum_gripper_medium/off', Empty)
+    small_srv = rospy.ServiceProxy('/malakrobo/vacuum_gripper_small/off', Empty)
+
+    large_srv()
+    medium_srv()
+    small_srv()
 
 
 # Function responsible for publishing Twist messages
@@ -381,6 +504,106 @@ def talker():
     rospy.loginfo("Publisher thread closing")
 
 
+def auto_object_target(data):
+    global camera_center, max_ang_vel, move_cmd, ang_vel, detection, ball_detected, sml_ball_grabbed, med_ball_grabbed, lrg_ball_grabbed, current_action, movement_thread_count, no_detection_count, detection_recovery_count, detect_cycle_count, arrow_pressed
+    if len(data.data) > 0:
+        ball_detected = 1
+    else:
+        ball_detected = 0
+
+    if (lrg_ball_grabbed or med_ball_grabbed or sml_ball_grabbed) and detection:
+        detection = False
+        movement_thread_count -= 1
+        current_action = 4
+        print("Object grabbed: ", detection, gripper_state, movement_thread_count, current_action)
+
+    if len(data.data) > 0 and detection:
+        no_detection_count = 0
+        detect_cycle_count = 0
+        object_width = data.data[1]
+        object_height = data.data[2]
+
+        speed_coefficient = float(camera_center / max_ang_vel / 4)
+
+        in_pts = np.array([[0.0, 0.0], [object_width, 0.0], [0.0, object_height], [object_width, object_height]],
+                          dtype=np.float32)
+        in_pts = np.array([in_pts])
+        homography = np.array([[data.data[3], data.data[6], data.data[9]],
+                               [data.data[4], data.data[7], data.data[10]],
+                               [data.data[5], data.data[8], data.data[11]]], dtype=np.float32)
+
+        out_pts = np.empty((3, 3), dtype=np.float32)
+
+        result = cv2.perspectiveTransform(in_pts, out_pts, homography)
+        x_pos = (result[0][0][0] + result[0][1][0] + result[0][2][0] + result[0][3][0]) / 4
+        ang_vel = - (x_pos - camera_center) / speed_coefficient
+
+        # print(x_pos, ang_vel)
+        if x_pos >= (camera_center + 15) or x_pos <= (camera_center - 15):
+            detected = True
+            if ang_vel < 0:
+                move_cmd.angular.z = min_ang_vel
+
+            elif ang_vel > 0:
+                move_cmd.angular.z = max_ang_vel
+
+        if (camera_center - 25) <= x_pos <= (camera_center + 25):
+            detected = True
+            move_cmd.linear.x = 0.1
+        else:
+            detected = False
+
+        if sml_ball_grabbed or med_ball_grabbed or lrg_ball_grabbed:
+            detection = False
+    else:
+        detected = False
+        if not arrow_pressed:
+            move_cmd.angular.z = 0
+            move_cmd.linear.x = 0
+
+    if len(data.data) == 0 and detection:
+        no_detection_count += 1
+        print(no_detection_count)
+        if no_detection_count > 25:
+            if no_detection_count == 26:
+                rospy.loginfo("No objects were detected for 25 frames, starting recovery rotation")
+            move_cmd.angular.z = min_ang_vel
+            if detection_recovery_count < 10:
+                if detection_recovery_count == 0:
+                    detect_cycle_count += 1
+                detection_recovery_count += 1
+                move_cmd.angular.z = min_ang_vel
+            elif detection_recovery_count < 30:
+                detection_recovery_count += 1
+                move_cmd.angular.z = max_ang_vel
+            else:
+                detection_recovery_count = -10
+
+        if detect_cycle_count == 5:
+            rospy.loginfo("No objects were detected in 5 recovery cycles, aborting!")
+            detection = False
+            detection_recovery_count = 0
+            detect_cycle_count = 0
+            no_detection_count = 0
+
+    # print(detected)
+
+
+def lrg_ball_state_update(data):
+    global lrg_ball_grabbed
+    lrg_ball_grabbed = data.data
+
+
+def med_ball_state_update(data):
+    global med_ball_grabbed
+    med_ball_grabbed = data.data
+
+
+def sml_ball_state_update(data):
+    global sml_ball_grabbed
+    sml_ball_grabbed = data.data
+
+
 def watch_window_tab():
     global tab_index, stop_threads
     while True:
@@ -403,6 +626,11 @@ def setup():
     rospy.init_node('twist_keyboard_publisher', anonymous=True)  # Node definition
     amcl_sub = rospy.Subscriber('/amcl_pose', PoseWithCovarianceStamped, amcl_window_update)
     targets_sub = rospy.Subscriber('/move_base/goal', MoveBaseActionGoal, goal_update)
+    object_sub = rospy.Subscriber('/objects', Float32MultiArray, auto_object_target)
+    lrg_ball_sub = rospy.Subscriber('/malakrobo/vacuum_gripper_large/grasping_large', Bool, lrg_ball_state_update)
+    med_ball_sub = rospy.Subscriber('/malakrobo/vacuum_gripper_medium/grasping_medium', Bool, med_ball_state_update)
+    sml_ball_sub = rospy.Subscriber('/malakrobo/vacuum_gripper_small/grasping_small', Bool, sml_ball_state_update)
+
     talker_thread.start()  # Calling publishing function
     tab_watch_thread.start()
     gui_thread.start()

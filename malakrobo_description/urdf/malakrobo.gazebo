@@ -31,6 +31,68 @@
     </plugin>
   </gazebo>
 
+ <gazebo>
+       <plugin name="gazebo_ros_vacuum_gripper1" filename="libgazebo_ros_vacuum_gripper.so">
+           <robotNamespace>/malakrobo/vacuum_gripper_large</robotNamespace>
+           <bodyName>vacuum_effector_large</bodyName>
+           <topicName>grasping_large</topicName>
+           <maxDistance>0.05</maxDistance>
+           <minDistance>0.01</minDistance>
+       </plugin>
+ </gazebo>
+
+ <gazebo>
+       <plugin name="gazebo_ros_vacuum_gripper2" filename="libgazebo_ros_vacuum_gripper.so">
+           <robotNamespace>/malakrobo/vacuum_gripper_medium</robotNamespace>
+           <bodyName>vacuum_effector_medium</bodyName>
+           <topicName>grasping_medium</topicName>
+           <maxDistance>0.1</maxDistance>
+           <minDistance>0.01</minDistance>
+       </plugin>
+ </gazebo>
+
+ <gazebo>
+       <plugin name="gazebo_ros_vacuum_gripper3" filename="libgazebo_ros_vacuum_gripper.so">
+           <robotNamespace>/malakrobo/vacuum_gripper_small</robotNamespace>
+           <bodyName>vacuum_effector_small</bodyName>
+           <topicName>grasping_small</topicName>
+           <maxDistance>0.2</maxDistance>
+           <minDistance>0.01</minDistance>
+       </plugin>
+ </gazebo>
+
+<gazebo reference="vacuum_effector_large">
+  <material><transparency>1</transparency></material>
+
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <kp>1000000.0</kp>
+  <kd>1.0</kd>
+  <selfCollide>false</selfCollide>
+  <gravity>true</gravity>
+</gazebo>
+
+<gazebo reference="vacuum_effector_medium">
+  <material><transparency>1</transparency></material>
+  <transparency>1</transparency>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <kp>1000000.0</kp>
+  <kd>1.0</kd>
+  <selfCollide>false</selfCollide>
+  <gravity>true</gravity>
+</gazebo>
+
+<gazebo reference="vacuum_effector_small">
+  <material><transparency>1</transparency></material>
+  <transparency>1</transparency>
+  <mu1>0.2</mu1>
+  <mu2>0.2</mu2>
+  <kp>1000000.0</kp>
+  <kd>1.0</kd>
+  <selfCollide>false</selfCollide>
+  <gravity>true</gravity>
+</gazebo>
 
 <gazebo reference="base_link">
   <material>${body_color}</material>

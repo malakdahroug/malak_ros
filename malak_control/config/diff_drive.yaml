@@ -4,16 +4,6 @@ malakrobo:
     type: joint_state_controller/JointStateController
     publish_rate: 50
 
-#  left_fence_to_front_controller:
-#    type: effort_controllers/JointPositionController
-#    joint: left_fence_to_front
-#    pid: { p: 50000.0, i: 100, d: 2000.0 }
-#
-#  right_fence_to_front_controller:
-#    type: effort_controllers/JointPositionController
-#    joint: right_fence_to_front
-#    pid: { p: 50000.0, i: 100, d: 2000.0 }
-
   mobile_base_controller:
     type        : "diff_drive_controller/DiffDriveController"
     left_wheel  : 'base_to_left_wheel'
