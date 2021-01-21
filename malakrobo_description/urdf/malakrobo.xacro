@@ -68,53 +68,13 @@
         <visual>
             <origin rpy="0 0 0" xyz="0 0 0.1"/>
             <geometry>
+                <box size="0.02 0.25 0.07"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0.07"/>
+            <geometry>
                 <box size="0.02 0.25 0.1"/>
-            </geometry>
-        </visual>
-        <collision>
-            <origin rpy="0 0 0" xyz="0 0 0.1"/>
-            <geometry>
-                <box size="0.02 0.25 0.1"/>
-            </geometry>
-        </collision>
-        <inertial>
-            <mass value="1"/>
-            <origin rpy="0 0 0" xyz="0 0 0"/>
-            <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
-        </inertial>
-    </link>
-
-    <link name="left_fence">
-        <visual>
-            <origin rpy="1.0 1.57 1.57" xyz="0 0 0"/>
-            <geometry>
-                <box size="0.1 0.01 0.12"/>
-            </geometry>
-        </visual>
-        <collision>
-            <origin rpy="1.57 -1.0 1.57" xyz="0 0 0"/>
-            <geometry>
-                <box size="0.1 0.01 0.12"/>
-            </geometry>
-        </collision>
-        <inertial>
-            <mass value="1"/>
-            <origin rpy="0 0 0" xyz="0 0 0"/>
-            <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
-        </inertial>
-    </link>
-
-    <link name="right_fence">
-        <visual>
-            <origin rpy="-1.0 1.57 1.57" xyz="0 0 0"/>
-            <geometry>
-                <box size="0.1 0.01 0.12"/>
-            </geometry>
-        </visual>
-        <collision>
-            <origin rpy="1.57 1.0 1.57" xyz="0 0 0"/>
-            <geometry>
-                <box size="0.1 0.01 0.12"/>
             </geometry>
         </collision>
         <inertial>
@@ -475,20 +435,6 @@
         <child link="vacuum_effector_small"/>
         <axis xyz="0.0 1.0 0.0"/>
         <limit effort="30" velocity="1.0" lower="0" upper="0"/>
-    </joint>
-
-    <joint name="base_to_left_fence" type="fixed">
-        <origin rpy="0 0 0" xyz="0.055 0.15 0.1"/>
-        <parent link="base_fence"/>
-        <child link="left_fence"/>
-        <axis xyz="0.0 1.0 0.0"/>
-    </joint>
-
-    <joint name="base_to_right_fence" type="fixed">
-        <origin rpy="0 0 0" xyz="0.055 -0.15 0.1"/>
-        <parent link="base_fence"/>
-        <child link="right_fence"/>
-        <axis xyz="0.0 1.0 0.0"/>
     </joint>
 
     <joint name="front_caster_base_joint" type="continuous">

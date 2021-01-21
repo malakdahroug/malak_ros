@@ -27,7 +27,7 @@
      <enum>Qt::NoFocus</enum>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <property name="usesScrollButtons">
      <bool>false</bool>
@@ -2441,21 +2441,21 @@ or using arrow keys on your keyboard</string>
         <number>0</number>
        </property>
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="large_ball_btn">
          <property name="text">
           <string>Pick up the large ball</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="medium_ball_btn">
          <property name="text">
           <string>Pick up the medium ball</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_3">
+        <widget class="QPushButton" name="small_ball_btn">
          <property name="text">
           <string>Pick up the small ball</string>
          </property>
