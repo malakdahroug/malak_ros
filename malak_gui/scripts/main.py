@@ -198,7 +198,7 @@ def exit_handler():
 # ACTION BUTTONS FUNCTIONS #
 def go_to_goal():
     global pose_count, current_target, current_action, movement_thread_count
-    if movement_thread_count == 0:
+    if movement_thread_count <= 0:
         current_target = 0
         current_action = 0
         pub = rospy.Publisher('/move_base_simple/goal', PoseStamped, queue_size=1)
@@ -340,6 +340,34 @@ def calculate_pose_1():
         if not target == 0:
             auto_pose_1 = [target.x, target.y, current_amcl.orientation.z, current_amcl.orientation.w]
 
+
+def calculate_pose_2():
+    global ball_position_1, ball_position_2, ball_position_3, ball_position_4, auto_pose_2, current_amcl, stop_threads
+    target = 0
+    upper_limit = 1.7
+    lower_limit = 0
+    while True:
+        if stop_threads:
+            break
+
+        if ball_position_1 is not None:
+            if lower_limit < ball_position_1.transform.translation.x < upper_limit:
+                target = ball_position_1.transform.translation
+
+        if ball_position_2 is not None:
+            if lower_limit < ball_position_2.transform.translation.x < upper_limit:
+                target = ball_position_2.transform.translation
+
+        if ball_position_3 is not None:
+            if lower_limit < ball_position_3.transform.translation.x < upper_limit:
+                target = ball_position_3.transform.translation
+
+        if ball_position_4 is not None:
+            if lower_limit < ball_position_4.transform.translation.x < upper_limit:
+                target = ball_position_4.transform.translation
+
+        if not target == 0:
+            auto_pose_2 = [target.x, target.y, current_amcl.orientation.z, current_amcl.orientation.w]
 
 
 def row(pose_index):
@@ -536,36 +564,20 @@ def row(pose_index):
 
             if not completed:
                 detection = False
-                pose_list = [
-                    [1.55, 1.4, -0.707, 0.707],
-                    [1.55, 0.6, -0.707, 0.707]
-                ]
-
-                for x in pose_list:
-                    goal.target_pose.header.seq = pose_count + 1
-                    goal.target_pose.header.stamp = rospy.Time.now()
-                    goal.target_pose.pose.position.x = x[0]
-                    goal.target_pose.pose.position.y = x[1]
-                    goal.target_pose.pose.orientation.z = x[2]
-                    goal.target_pose.pose.orientation.w = x[3]
-
-                    client.send_goal(goal)
-                    wait = client.wait_for_result()
-                    if not wait:
-                        rospy.logerr("Action server not available!")
-                        rospy.signal_shutdown("Action server not available!")
-                        break
-
                 wait_for_ball = True
-                detection = True
+                if move_to_pose_single(client, 1.55, 1.4, -0.707, 0.707):
+                    if move_to_pose_single(client, 1.55, 0.6, -0.707, 0.707):
+                        detection = True
+
                 detected = False
                 while wait_for_ball:
-
                     if lrg_ball_grabbed:
                         detection = False
-                        take_ball_home()
-                        completed = True
-                        break
+                        if current_amcl.position.y < -0.6 and 1.1 < current_amcl.position.x < 1.7:
+                            if move_to_pose_single(client, 1.55, -2.25, 0.707, 0.707):
+                                take_ball_home()
+                                completed = True
+                                break
 
                     if not auto_pose_1 == [0, 0, 0, 0]:
                         print('in')
@@ -577,9 +589,11 @@ def row(pose_index):
                 while detected:
                     if lrg_ball_grabbed:
                         detection = False
-                        take_ball_home()
-                        completed = True
-                        break
+                        if current_amcl.position.y < -0.6 and 1.1 < current_amcl.position.x < 1.7:
+                            if move_to_pose_single(client, 1.55, -2.25, 0.707, 0.707):
+                                take_ball_home()
+                                completed = True
+                                break
                     time.sleep(0.2)
             else:
                 current_target = -1
@@ -590,7 +604,7 @@ def row(pose_index):
                 return
 
             if not completed:
-                wait_for_ball = False
+                wait_for_ball = True
                 detection = False
                 detected = False
                 if move_to_pose_single(client, 1.55, -0.6, -0.707, 0.707):
@@ -600,9 +614,11 @@ def row(pose_index):
 
                     if lrg_ball_grabbed:
                         detection = False
-                        take_ball_home()
-                        completed = True
-                        break
+                        if current_amcl.position.y < -0.6 and 1.1 < current_amcl.position.x < 1.7:
+                            if move_to_pose_single(client, 1.55, -2.25, 0.707, 0.707):
+                                take_ball_home()
+                                completed = True
+                                break
 
                     if not auto_pose_1 == [0, 0, 0, 0]:
                         print('in')
@@ -614,9 +630,11 @@ def row(pose_index):
                 while detected:
                     if lrg_ball_grabbed:
                         detection = False
-                        take_ball_home()
-                        completed = True
-                        break
+                        if current_amcl.position.y < -0.6 and 1.1 < current_amcl.position.x < 1.7:
+                            if move_to_pose_single(client, 1.55, -2.25, 0.707, 0.707):
+                                take_ball_home()
+                                completed = True
+                                break
                     time.sleep(0.2)
             else:
                 current_target = -1
@@ -659,7 +677,8 @@ def row(pose_index):
             return
 
         if pose_index == 20:
-            completed = False
+            target = 0
+            detected = False
             if move_to_pose_single(client, 2.15, 0.0, 0.0, 1.0):
                 detection = True
 
@@ -668,26 +687,57 @@ def row(pose_index):
                     detection = False
                     break
 
-                if med_ball_grabbed or lrg_ball_grabbed:
+                if lrg_ball_grabbed or med_ball_grabbed:
                     detection = False
                     take_ball_home()
                     completed = True
+                    break
+
+                if not auto_pose_2 == [0, 0, 0, 0]:
+                    print('in')
+                    move_to_pose_single(client, auto_pose_2[0], auto_pose_2[1], auto_pose_2[2], auto_pose_2[3])
+                    detected = True
+                    break
+                time.sleep(0.2)
+
+            while detected:
+                if lrg_ball_grabbed or med_ball_grabbed:
+                    detection = False
+                    take_ball_home()
+                    completed = True
+                    break
                 time.sleep(0.2)
 
             if not completed:
-                wait_for_ball = False
+                wait_for_ball = True
                 detection = False
+                detected = False
                 if move_to_pose_single(client, 2.65, 0.0, 0.707, 0.707):
                     detection = True
 
                 while wait_for_ball:
-                    if med_ball_grabbed or lrg_ball_grabbed:
+
+                    if lrg_ball_grabbed or med_ball_grabbed:
                         detection = False
                         take_ball_home()
                         completed = True
                         break
 
+                    if not auto_pose_1 == [0, 0, 0, 0]:
+                        print('in')
+                        move_to_pose_single(client, auto_pose_2[0], auto_pose_2[1], auto_pose_2[2], auto_pose_2[3])
+                        detected = True
+                        break
                     time.sleep(0.2)
+
+                while detected:
+                    if lrg_ball_grabbed or med_ball_grabbed:
+                        detection = False
+                        take_ball_home()
+                        completed = True
+                        break
+                    time.sleep(0.2)
+
             else:
                 current_target = -1
                 current_action = -1
@@ -697,18 +747,33 @@ def row(pose_index):
                 return
 
             if not completed:
-                wait_for_ball = False
+                wait_for_ball = True
                 detection = False
+                detected = False
                 if move_to_pose_single(client, 2.65, 0.6, 0.707, 0.707):
                     detection = True
 
                 while wait_for_ball:
-                    if med_ball_grabbed or lrg_ball_grabbed:
+
+                    if lrg_ball_grabbed or med_ball_grabbed:
                         detection = False
                         take_ball_home()
                         completed = True
                         break
 
+                    if not auto_pose_2 == [0, 0, 0, 0]:
+                        print('in')
+                        move_to_pose_single(client, auto_pose_2[0], auto_pose_2[1], auto_pose_2[2], auto_pose_2[3])
+                        detected = True
+                        break
+                    time.sleep(0.2)
+
+                while detected:
+                    if lrg_ball_grabbed or med_ball_grabbed:
+                        detection = False
+                        take_ball_home()
+                        completed = True
+                        break
                     time.sleep(0.2)
             else:
                 current_target = -1
@@ -719,35 +784,38 @@ def row(pose_index):
                 return
 
             if not completed:
-                wait_for_ball = False
                 detection = False
-                pose_list = [
-                    [2.65, 1.4, -0.707, 0.707],
-                    [2.65, 0.6, -0.707, 0.707]
-                ]
+                wait_for_ball = True
+                if move_to_pose_single(client, 2.65, 1.4, -0.707, 0.707):
+                    if move_to_pose_single(client, 2.65, 0.6, -0.707, 0.707):
+                        detection = True
 
-                for x in pose_list:
-                    goal.target_pose.header.seq = pose_count + 1
-                    goal.target_pose.header.stamp = rospy.Time.now()
-                    goal.target_pose.pose.position.x = x[0]
-                    goal.target_pose.pose.position.y = x[1]
-                    goal.target_pose.pose.orientation.z = x[2]
-                    goal.target_pose.pose.orientation.w = x[3]
-
-                    client.send_goal(goal)
-                    wait = client.wait_for_result()
-                    if not wait:
-                        rospy.logerr("Action server not available!")
-                        rospy.signal_shutdown("Action server not available!")
-                        break
-
-                detection = True
+                detected = False
                 while wait_for_ball:
-                    if med_ball_grabbed or lrg_ball_grabbed:
+                    if lrg_ball_grabbed or med_ball_grabbed:
                         detection = False
-                        take_ball_home()
-                        completed = True
+                        if current_amcl.position.y < -0.6 and 1.1 < current_amcl.position.x < 1.7:
+                            if move_to_pose_single(client, 2.65, -2.25, 0.707, 0.707):
+                                take_ball_home()
+                                completed = True
+                                break
+
+                    if not auto_pose_2 == [0, 0, 0, 0]:
+                        print('in')
+                        move_to_pose_single(client, auto_pose_2[0], auto_pose_2[1], auto_pose_2[2], auto_pose_2[3])
+                        detected = True
                         break
+                    time.sleep(0.2)
+
+                while detected:
+                    if lrg_ball_grabbed or med_ball_grabbed:
+                        detection = False
+                        if current_amcl.position.y < -0.6 and 1.1 < current_amcl.position.x < 1.7:
+                            if move_to_pose_single(client, 2.65, -2.25, 0.707, 0.707):
+                                take_ball_home()
+                                completed = True
+                                break
+                    time.sleep(0.2)
             else:
                 current_target = -1
                 current_action = -1
@@ -757,18 +825,37 @@ def row(pose_index):
                 return
 
             if not completed:
-                wait_for_ball = False
+                wait_for_ball = True
                 detection = False
+                detected = False
                 if move_to_pose_single(client, 2.65, -0.6, -0.707, 0.707):
                     detection = True
 
                 while wait_for_ball:
-                    if med_ball_grabbed or lrg_ball_grabbed:
-                        detection = False
-                        take_ball_home()
-                        completed = True
-                        break
 
+                    if lrg_ball_grabbed or med_ball_grabbed:
+                        detection = False
+                        if current_amcl.position.y < -0.6 and 1.1 < current_amcl.position.x < 1.7:
+                            if move_to_pose_single(client, 2.65, -2.25, 0.707, 0.707):
+                                take_ball_home()
+                                completed = True
+                                break
+
+                    if not auto_pose_2 == [0, 0, 0, 0]:
+                        print('in')
+                        move_to_pose_single(client, auto_pose_2[0], auto_pose_2[1], auto_pose_2[2], auto_pose_2[3])
+                        detected = True
+                        break
+                    time.sleep(0.2)
+
+                while detected:
+                    if lrg_ball_grabbed or med_ball_grabbed:
+                        detection = False
+                        if current_amcl.position.y < -0.6 and 1.1 < current_amcl.position.x < 1.7:
+                            if move_to_pose_single(client, 2.65, -2.25, 0.707, 0.707):
+                                take_ball_home()
+                                completed = True
+                                break
                     time.sleep(0.2)
             else:
                 current_target = -1
@@ -780,27 +867,178 @@ def row(pose_index):
 
             if not completed:
                 wait_count = 0
-                while not med_ball_grabbed or lrg_ball_grabbed:
+                while not lrg_ball_grabbed or med_ball_grabbed:
+                    if not auto_pose_2 == [0, 0, 0, 0]:
+                        if move_to_pose_single(client, auto_pose_2[0], auto_pose_2[1], auto_pose_2[2], auto_pose_2[3]):
+                            if lrg_ball_grabbed or med_ball_grabbed:
+                                detection = False
+                                if current_amcl.position.y < -0.6 and 1.1 < current_amcl.position.x < 1.7:
+                                    if move_to_pose_single(client, 2.65, -2.25, 0.707, 0.707):
+                                        take_ball_home()
+                                        completed = True
+                                        break
+
                     wait_count += 1
-                    if wait_count == 90:
+                    if wait_count >= 90:
                         rospy.logerr("90 second elapsed and the ball was not found! Going back to goal!")
                         stop_suction()
                         go_to_goal()
                     time.sleep(1)
 
-                if med_ball_grabbed:
-                    detection = False
-                    if current_amcl.position.y < -0.6 and 2.2 < current_amcl.position.x < 2.8:
-                        if move_to_pose_single(client, 2.65, -2.25, 0.707, 0.707):
-                            take_ball_home()
-                            completed = True
-            else:
-                current_target = -1
-                current_action = -1
-                movement_thread_count -= 1
-                wait_for_ball = False
-                rospy.loginfo("Closing position control thread")
-                return
+            if lrg_ball_grabbed or med_ball_grabbed:
+                detection = False
+                take_ball_home()
+                completed = True
+
+            current_target = -1
+            current_action = -1
+            movement_thread_count -= 1
+            wait_for_ball = False
+            rospy.loginfo("Closing position control thread")
+            return
+        # if pose_index == 20:
+        #     completed = False
+        #     if move_to_pose_single(client, 2.15, 0.0, 0.0, 1.0):
+        #         detection = True
+        #
+        #     while wait_for_ball:
+        #         if current_amcl.position.x > 2.78:
+        #             detection = False
+        #             break
+        #
+        #         if med_ball_grabbed or lrg_ball_grabbed:
+        #             detection = False
+        #             take_ball_home()
+        #             completed = True
+        #         time.sleep(0.2)
+        #
+        #     if not completed:
+        #         wait_for_ball = False
+        #         detection = False
+        #         if move_to_pose_single(client, 2.65, 0.0, 0.707, 0.707):
+        #             detection = True
+        #
+        #         while wait_for_ball:
+        #             if med_ball_grabbed or lrg_ball_grabbed:
+        #                 detection = False
+        #                 take_ball_home()
+        #                 completed = True
+        #                 break
+        #
+        #             time.sleep(0.2)
+        #     else:
+        #         current_target = -1
+        #         current_action = -1
+        #         movement_thread_count -= 1
+        #         wait_for_ball = False
+        #         rospy.loginfo("Closing position control thread")
+        #         return
+        #
+        #     if not completed:
+        #         wait_for_ball = False
+        #         detection = False
+        #         if move_to_pose_single(client, 2.65, 0.6, 0.707, 0.707):
+        #             detection = True
+        #
+        #         while wait_for_ball:
+        #             if med_ball_grabbed or lrg_ball_grabbed:
+        #                 detection = False
+        #                 take_ball_home()
+        #                 completed = True
+        #                 break
+        #
+        #             time.sleep(0.2)
+        #     else:
+        #         current_target = -1
+        #         current_action = -1
+        #         movement_thread_count -= 1
+        #         wait_for_ball = False
+        #         rospy.loginfo("Closing position control thread")
+        #         return
+        #
+        #     if not completed:
+        #         wait_for_ball = False
+        #         detection = False
+        #         pose_list = [
+        #             [2.65, 1.4, -0.707, 0.707],
+        #             [2.65, 0.6, -0.707, 0.707]
+        #         ]
+        #
+        #         for x in pose_list:
+        #             goal.target_pose.header.seq = pose_count + 1
+        #             goal.target_pose.header.stamp = rospy.Time.now()
+        #             goal.target_pose.pose.position.x = x[0]
+        #             goal.target_pose.pose.position.y = x[1]
+        #             goal.target_pose.pose.orientation.z = x[2]
+        #             goal.target_pose.pose.orientation.w = x[3]
+        #
+        #             client.send_goal(goal)
+        #             wait = client.wait_for_result()
+        #             if not wait:
+        #                 rospy.logerr("Action server not available!")
+        #                 rospy.signal_shutdown("Action server not available!")
+        #                 break
+        #
+        #         detection = True
+        #         while wait_for_ball:
+        #             if med_ball_grabbed or lrg_ball_grabbed:
+        #                 detection = False
+        #                 take_ball_home()
+        #                 completed = True
+        #                 break
+        #     else:
+        #         current_target = -1
+        #         current_action = -1
+        #         movement_thread_count -= 1
+        #         wait_for_ball = False
+        #         rospy.loginfo("Closing position control thread")
+        #         return
+        #
+        #     if not completed:
+        #         wait_for_ball = False
+        #         detection = False
+        #         if move_to_pose_single(client, 2.65, -0.6, -0.707, 0.707):
+        #             detection = True
+        #
+        #         while wait_for_ball:
+        #             if med_ball_grabbed or lrg_ball_grabbed:
+        #                 detection = False
+        #                 take_ball_home()
+        #                 completed = True
+        #                 break
+        #
+        #             time.sleep(0.2)
+        #     else:
+        #         current_target = -1
+        #         current_action = -1
+        #         movement_thread_count -= 1
+        #         wait_for_ball = False
+        #         rospy.loginfo("Closing position control thread")
+        #         return
+        #
+        #     if not completed:
+        #         wait_count = 0
+        #         while not med_ball_grabbed or lrg_ball_grabbed:
+        #             wait_count += 1
+        #             if wait_count == 90:
+        #                 rospy.logerr("90 second elapsed and the ball was not found! Going back to goal!")
+        #                 stop_suction()
+        #                 go_to_goal()
+        #             time.sleep(1)
+        #
+        #         if med_ball_grabbed:
+        #             detection = False
+        #             if current_amcl.position.y < -0.6 and 2.2 < current_amcl.position.x < 2.8:
+        #                 if move_to_pose_single(client, 2.65, -2.25, 0.707, 0.707):
+        #                     take_ball_home()
+        #                     completed = True
+        #     else:
+        #         current_target = -1
+        #         current_action = -1
+        #         movement_thread_count -= 1
+        #         wait_for_ball = False
+        #         rospy.loginfo("Closing position control thread")
+        #         return
 
     current_target = -1
     current_action = -1
@@ -812,7 +1050,7 @@ def row(pose_index):
 def go_to_row_1():
     global movement_thread_count, current_target, current_action
     pub_thread = threading.Thread(target=row, args=(0,))
-    if movement_thread_count == 0:
+    if movement_thread_count <= 0:
         current_target = 1
         current_action = 1
         pub_thread.start()
@@ -822,7 +1060,7 @@ def go_to_row_1():
 def go_to_row_2():
     global movement_thread_count, current_target, current_action
     pub_thread = threading.Thread(target=row, args=(1,))
-    if movement_thread_count == 0:
+    if movement_thread_count <= 0:
         current_target = 2
         current_action = 1
         pub_thread.start()
@@ -832,7 +1070,7 @@ def go_to_row_2():
 def go_to_row_3():
     global movement_thread_count, current_target, current_action
     pub_thread = threading.Thread(target=row, args=(2,))
-    if movement_thread_count == 0:
+    if movement_thread_count <= 0:
         current_target = 3
         current_action = 1
         pub_thread.start()
@@ -842,7 +1080,7 @@ def go_to_row_3():
 def leave_ball():
     global movement_thread_count, current_target, current_action, lrg_ball_grabbed, med_ball_grabbed, sml_ball_grabbed
     pub_thread = threading.Thread(target=row, args=(-1,))
-    if movement_thread_count == 0 and (lrg_ball_grabbed or med_ball_grabbed or sml_ball_grabbed):
+    if movement_thread_count <= 0 and (lrg_ball_grabbed or med_ball_grabbed or sml_ball_grabbed):
         current_target = 0
         current_action = 3
         pub_thread.start()
@@ -851,7 +1089,7 @@ def leave_ball():
 
 def object_detection():
     global detection, movement_thread_count, current_action, gripper_state, detection_recovery_count, no_detection_count
-    if movement_thread_count == 0:
+    if movement_thread_count <= 0:
         detection = True
         gripper_state = 1
         start_suction()
@@ -874,7 +1112,7 @@ def control_suction():
 def small_ball_auto():
     global movement_thread_count, current_action, gripper_state, detection_recovery_count, no_detection_count, current_target
     pub_thread = threading.Thread(target=row, args=(10,))
-    if movement_thread_count == 0:
+    if movement_thread_count <= 0:
         gripper_state = 1
         start_suction()
         current_action = 5
@@ -888,7 +1126,7 @@ def small_ball_auto():
 def medium_ball_auto():
     global movement_thread_count, current_action, gripper_state, detection_recovery_count, no_detection_count, current_target
     pub_thread = threading.Thread(target=row, args=(20,))
-    if movement_thread_count == 0:
+    if movement_thread_count <= 0:
         gripper_state = 1
         start_suction()
         current_action = 5
@@ -902,7 +1140,7 @@ def medium_ball_auto():
 def large_ball_auto():
     global movement_thread_count, current_action, gripper_state, detection_recovery_count, no_detection_count, current_target
     pub_thread = threading.Thread(target=row, args=(30,))
-    if movement_thread_count == 0:
+    if movement_thread_count <= 0:
         gripper_state = 1
         start_suction()
         current_action = 5
@@ -1204,11 +1442,13 @@ def setup():
     b3_det_thread = threading.Thread(target=get_ball_position, args=(3,))
     b4_det_thread = threading.Thread(target=get_ball_position, args=(4,))
     auto_pose_1_thread = threading.Thread(target=calculate_pose_1)
+    auto_pose_2_thread = threading.Thread(target=calculate_pose_2)
     b1_det_thread.start()
     b2_det_thread.start()
     b3_det_thread.start()
     b4_det_thread.start()
     auto_pose_1_thread.start()
+    auto_pose_2_thread.start()
     talker_thread.start()  # Calling publishing function
     tab_watch_thread.start()
     gui_thread.start()
