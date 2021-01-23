@@ -303,7 +303,6 @@ def get_ball_position(obj):
 
         rate.sleep()
 
-
     # if trg == 1:
     #     upper_limit = 1.7
     #     lower_limit = 0
@@ -313,6 +312,8 @@ def get_ball_position(obj):
     # elif trg == 3:
     #     upper_limit = 2.8
     #     lower_limit = 3.6
+
+
 def calculate_pose_1():
     global ball_position_1, ball_position_2, ball_position_3, ball_position_4, auto_pose_1, current_amcl, stop_threads
     target = 0
@@ -1138,7 +1139,6 @@ def row(pose_index):
                 rospy.loginfo("Closing position control thread")
                 return
 
-
             if not completed:
                 wait_count = 0
                 while not sml_ball_grabbed or med_ball_grabbed:
@@ -1294,6 +1294,7 @@ def auto_full_sequence():
         pub_thread.start()
         movement_thread_count += 1
 
+
 # ACTION BUTTONS #
 window.go_to_goal_btn.pressed.connect(go_to_goal)
 window.go_to_row_1_btn.pressed.connect(go_to_row_1)
@@ -1351,7 +1352,8 @@ def gui_update():
     global amcl_text, gripper_state, ball_detected, current_target, stop_threads, current_action, goal_text, sml_ball_grabbed, med_ball_grabbed, lrg_ball_grabbed, movement_thread_count, detection, movement_thread_count
 
     targets = ["Goal", "ROW 1", "ROW 2", "ROW 3", "SML BALL AUTO", "MED BALL AUTO", "LRG BALL AUTO"]
-    actions = ["GO TO GOAL", "GO TO ROW", "DETECT BALLS", "TAKE BALL TO GOAL", "BALL GRABBED", "AUTONOMOUS", "FULL AUTO"]
+    actions = ["GO TO GOAL", "GO TO ROW", "DETECT BALLS", "TAKE BALL TO GOAL", "BALL GRABBED", "AUTONOMOUS",
+               "FULL AUTO"]
 
     while True:
         if stop_threads:

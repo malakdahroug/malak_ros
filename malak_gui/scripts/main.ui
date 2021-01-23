@@ -2757,7 +2757,7 @@ or using arrow keys on your keyboard</string>
        <string>Current goal:</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_11">
+     <widget class="QPushButton" name="full_sequence_btn">
       <property name="geometry">
        <rect>
         <x>250</x>
