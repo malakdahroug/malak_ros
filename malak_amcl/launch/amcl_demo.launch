@@ -1,13 +1,17 @@
 <launch>
 
-  <!-- Run the map server -->
+  <!-- Defines a map file that should be used -->
   <arg name="map_file" default="$(find malak_amcl)/maps/map2.yaml"/>
+
+  <!-- Run the map server node with the map specified in map_file argument -->
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" >
+    <!-- Defining the frame name of map -->
     <param name="frame_id" value="map"/>
   </node>
 
-
-
+  <!-- Start AMCL -->
   <include file="$(find malak_amcl)/launch/amcl.launch" />
+
+  <!-- Static transform between map and odometry -->
   <node pkg ="tf" 	type="static_transform_publisher" 	name="map_to_odom_link"  	args="0.0 0.0 0.0 0.0 0.0 0.0 /map /odom 40"/>
 </launch>

@@ -1,11 +1,14 @@
 <launch>
-
+  <!-- Tells AMCL to use map -->
   <arg name="use_map_topic" default="true"/>
+  <!-- Defines which topic should AMCL be listening on for laser scan-->
   <arg name="scan_topic" default="/malakrobo/laser/scan" />
 
+  <!-- Defining AMCL node -->
   <node pkg="amcl" type="amcl" name="amcl">
-
+    <!-- Uses the use_map_topic argument to control if map topic should be used -->
     <param name="use_map_topic" value="$(arg use_map_topic)"/>
+
     <!-- Publish scans from best pose at a max of 10 Hz -->
     <param name="odom_model_type" value="diff-corrected"/>
     <param name="odom_alpha5" value="0.1"/>
@@ -39,6 +42,9 @@
     <param name="transform_tolerance" value="1.0"/>
     <param name="recovery_alpha_slow" value="0.0"/>
     <param name="recovery_alpha_fast" value="0.0"/>
+
+    <!-- Uses the scan argument to control which topic should AMCL be listening on for laser scan  -->
+    <!-- Remaps the default scan topic to the topic specified -->
     <remap from="scan" to="$(arg scan_topic)"/>
   </node>
 

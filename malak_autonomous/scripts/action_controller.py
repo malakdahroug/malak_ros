@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import cv2
-import rospy
+import rospyros
 import numpy as np
 from std_msgs.msg import Float32MultiArray, Float64
 from geometry_msgs.msg import Twist
